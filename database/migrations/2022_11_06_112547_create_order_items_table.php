@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('item_invoices', function (Blueprint $table) {
+        Schema::create('order_item', function (Blueprint $table) {
             $table->id();
-            $table->string('number', 16)->unique();
-            $table->foreignId('seller_id')->constrained('sellers')->nullOnDelete();
-            $table->foreignId('provider_id')->constrained('providers')->nullOnDelete();
-            $table->timestamps();
+            $table->foreignId('order_id')->nullable()->constrained('orders')->onDelete('set null');
+            $table->foreignId('item_id')->nullable()->constrained('items')->onDelete('set null');
+            $table->integer('count')->default(0);
         });
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('item_invoices');
+        Schema::dropIfExists('order_item');
     }
 };

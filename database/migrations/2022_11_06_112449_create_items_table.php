@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('item_category_id')->nullable()->constrained('item_categories')->onDelete('set null');
+            $table->foreignId('promotion_id')->nullable()->constrained('promotions')->onDelete('set null');
+            $table->foreignId('item_invoice_id')->nullable()->constrained('item_invoices')->onDelete('set null');
             $table->string('name')->unique();
             $table->string('number', 16);
             $table->integer('count');
@@ -22,9 +25,6 @@ return new class extends Migration
             $table->double('price');
             $table->double('sale_price');
             $table->string('image');
-            $table->foreignId('item_category_id')->constrained('item_categories')->nullOnDelete();
-            $table->foreignId('promotion_id')->constrained('promotions')->nullOnDelete();
-            $table->foreignId('item_invoice_id')->constrained('item_invoices')->nullOnDelete();
         });
     }
 

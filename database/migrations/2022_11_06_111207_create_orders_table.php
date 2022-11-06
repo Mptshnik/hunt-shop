@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('client_application_form_id')->nullable()->
+                constrained('client_application_forms')->onDelete('set null');
             $table->string('name');
             $table->string('number')->unique();
-            $table->foreignId('client_application_form_id')->
-                constrained('client_application_forms')->nullOnDelete();
+
             $table->timestamps();
         });
     }

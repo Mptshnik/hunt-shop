@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('client_application_forms', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('employee_id')->nullable()->constrained('employees')->nullOnDelete();
             $table->string('name');
             $table->string('number', 16)->unique();
             $table->string('content', 1000);

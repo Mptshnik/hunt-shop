@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('purchase_applications', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('employee_id')->constrained('employees')->cascadeOnDelete();
             $table->string('name');
             $table->string('number', 16)->unique();
             $table->string('content', 1000);
-            $table->foreignId('employee_id')->constrained('employees')->nullOnDelete();
             $table->timestamps();
         });
     }

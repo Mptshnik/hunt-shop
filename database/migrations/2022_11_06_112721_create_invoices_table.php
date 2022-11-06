@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('seller_id')->nullable()->constrained('sellers')->onDelete('set null');
+            $table->foreignId('order_id')->nullable()->constrained('orders')->onDelete('set null');
             $table->string('number', 16)->unique();
-            $table->foreignId('seller_id')->constrained('sellers')->nullOnDelete();
-            $table->foreignId('order_id')->constrained('orders')->nullOnDelete();
             $table->timestamps();
         });
     }
