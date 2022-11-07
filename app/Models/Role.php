@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
+
     public $timestamps = false;
     public const IS_ADMIN = 1;
     public const IS_HR = 2;

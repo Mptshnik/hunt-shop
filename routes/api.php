@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+//to do (auth)
+Route::middleware('guest')->group(function (){
+    Route::post('create-user',[\App\Http\Controllers\UserController::class, 'store']);
+    Route::post('login',[\App\Http\Controllers\AuthorizationController::class, 'login']);
+});
+
+Route::middleware('auth:sanctum')->group(function (){
+    Route::get('/user', function () {
+
+        $user = Auth::user()->with('role')->with('employee')->get();
+        return $user;
+    });
+    Route::get('logout',[\App\Http\Controllers\AuthorizationController::class, 'logout']);
 });

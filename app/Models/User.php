@@ -14,7 +14,7 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->hasOne(Role::class);
+        return $this->belongsTo(Role::class);
     }
 
     public function employee()
@@ -30,7 +30,9 @@ class User extends Authenticatable
     protected $fillable = [
         'login',
         'password',
-        'agreement'
+        'agreement',
+        'role_id',
+        'employee_id'
     ];
 
     /**
@@ -41,6 +43,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $visible = [
+        'login',
+        'created_at',
+        'updated_at',
+        'role',
+        'employee'
     ];
 
     /**

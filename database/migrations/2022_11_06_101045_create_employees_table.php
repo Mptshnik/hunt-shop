@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('first_name');
             $table->string('middle_name')->nullable()->default('');
-            $table->string('image');
+            $table->string('image')->nullable()->default(null);
             $table->string('passport_series', 6)->unique();
             $table->string('passport_number', 4)->unique();
             $table->dateTime('birthday_date');
