@@ -33,7 +33,7 @@ class CreateUserFormRequest extends FormRequest
             'password' => 'required|min:5',
             'agreement' => 'accepted',
             'role_id' => 'required|integer',
-            'employee_id' => 'integer'
+            'employee_id' => 'nullable|integer'
         ];
     }
 

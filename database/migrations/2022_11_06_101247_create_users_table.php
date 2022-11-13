@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('login')->unique();
             $table->string('password');
             $table->boolean('agreement');
-            $table->foreignId('employee_id')->constrained('employees')->cascadeOnDelete();
+            $table->foreignId('employee_id')->nullable()->default(null)->
+                constrained('employees')->cascadeOnDelete();
             $table->foreignId('role_id')->constrained('roles')->cascadeOnDelete();
             $table->rememberToken();
             $table->timestamps();

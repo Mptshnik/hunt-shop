@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserFormRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 
 class UserController extends Controller
@@ -15,7 +16,6 @@ class UserController extends Controller
 
         $user = User::create($data);
 
-        //$token = $user->createToken('JWT')->plainTextToken;
 
         $response = [
             'user' => $user,
@@ -33,5 +33,13 @@ class UserController extends Controller
     public function delete()
     {
 
+    }
+
+    public function getAuthorizedUser()
+    {
+        $userLogin = Auth::user()['login'];
+        $user = User::where('login', $userLogin)->with('role')->with('employee')->get();
+
+        return $user;
     }
 }
