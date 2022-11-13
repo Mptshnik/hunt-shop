@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
-
+namespace App\Http\Requests\Employee;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class EmployeeCreateFormRequest extends FormRequest
+class UpdateEmployeeFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,7 +18,7 @@ class EmployeeCreateFormRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
+
      * @return array<string, mixed>
      */
     public function rules()
@@ -27,8 +27,8 @@ class EmployeeCreateFormRequest extends FormRequest
             'last_name' => 'required|min:1|max:255|string',
             'first_name' => 'required|min:1|max:255|string',
             'middle_name' => 'nullable|string',
-            'passport_series' => 'required|digits_between:4,4|unique:employees',
-            'passport_number' => 'required|digits_between:6,6|unique:employees',
+            'passport_series' => ['required', 'digits_between:4,4', Rule::unique('employees')->ignore($this->id)],
+            'passport_number' => ['required', 'digits_between:6,6', Rule::unique('employees')->ignore($this->id)],
             'birthday_date' => 'required|date:d-m-Y|before:today'
         ];
     }
@@ -50,7 +50,7 @@ class EmployeeCreateFormRequest extends FormRequest
 
             'passport_series.required' => 'Серия паспорта обязательна',
             'passport_series.digits_between' => 'Длина серии паспорта 4 символа',
-            'passport_series.unique' => 'Сери паспорта должны быть уникальной',
+            'passport_series.unique' => 'Серия паспорта должна быть уникальной',
 
             'passport_number.required' => 'Номер паспорта обязателен',
             'passport_number.digits_between' => 'Длина номера паспорта 6 символов',

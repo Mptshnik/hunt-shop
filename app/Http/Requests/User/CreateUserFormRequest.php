@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use App\Models\Role;
 use App\Models\User;
@@ -29,8 +29,8 @@ class CreateUserFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'login' => 'required|unique:users|min:5',
-            'password' => 'required|min:5',
+            'login' => 'required|unique:users|min:5|max:25',
+            'password' => 'required|min:5|max:25',
             'agreement' => 'accepted',
             'role_id' => 'required|integer',
             'employee_id' => 'nullable|integer'
@@ -44,9 +44,13 @@ class CreateUserFormRequest extends FormRequest
             'login.required' => 'Логин обязателен',
             'login.unique' => 'Логин должен быть уникальным',
             'login.min' => 'Минимальная длина логина - 5 символов',
+            'login.max' => 'Максимальная длина логина - 25 символов',
+
             'password.required' => 'Пароль обязателен',
             'password.min' => 'Минимальная длина пароля - 5 символов',
-            'agreement.required' => 'Соглашение обязательно',
+            'password.max' => 'Максимальная длина пароля - 25 символов',
+
+            'agreement.accepted' => 'Соглашение обязательно',
             'role_id.required' => 'Роль обязательна'
         ];
     }
