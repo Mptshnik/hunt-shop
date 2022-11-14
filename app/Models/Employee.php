@@ -11,10 +11,19 @@ class Employee extends Model
 
     public $timestamps = false;
 
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
+
     public function user()
     {
         return $this->hasOne(User::class);
     }
+
+    protected $hidden = [
+        'post_id'
+    ];
 
     protected $fillable =
     [
@@ -23,7 +32,8 @@ class Employee extends Model
         'middle_name',
         'passport_series',
         'passport_number',
-        'birthday_date'
+        'birthday_date',
+        'post_id'
     ];
 
 

@@ -29,7 +29,8 @@ class CreateEmployeeFormRequest extends FormRequest
             'middle_name' => 'nullable|string',
             'passport_series' => 'required|digits_between:4,4|unique:employees',
             'passport_number' => 'required|digits_between:6,6|unique:employees',
-            'birthday_date' => 'required|date:d-m-Y|before:today'
+            'birthday_date' => 'required|date:d-m-Y|before:today',
+            'post_id' => 'nullable|integer'
         ];
     }
 
@@ -58,7 +59,9 @@ class CreateEmployeeFormRequest extends FormRequest
 
             'birthday_date.required' => 'Дата рождения обязательна',
             'birthday_date.date' => 'Формат даты ДД-ММ-ГГГГ',
-            'birthday.before' => 'Дата рождения не может быть больше сегодняшей'
+            'birthday.before' => 'Дата рождения не может быть больше сегодняшей',
+
+            'post_id.integer' => 'Некорректная должность'
         ];
     }
 }

@@ -18,7 +18,7 @@ class UserController extends Controller
         $user = User::create($data);
 
         $response = [
-            'user' => $user->where('login', $request->login)->with('role')->with('employee')->get(),
+            'user' => $user->with('role')->with('employee')->first(),
             'message' => 'Пользователь успешно создан'
         ];
 
@@ -27,9 +27,6 @@ class UserController extends Controller
 
     public function update(UpdateUserFormRequest $request, $id)
     {
-        $data = $request->validated();
-        $data['password'] = Hash::make(($request['password']));
-
         $user = User::find($id);
 
         if($user == null)
@@ -37,11 +34,16 @@ class UserController extends Controller
             return response(['message' => "Пользователь с id=$id не найден"], 404);
         }
 
+        $data = $request->validated();
+        $data['password'] = Hash::make(($request['password']));
+
         $user->update($data);
         $user->save();
 
+        $user_updated = User::where('login', $request->login)->with('role')->with('employee')->first();
+
         $response = [
-            'user' => $user->where('login', $request->login)->with('role')->with('employee')->get(),
+            'user' => $user_updated,
             'message' => 'Пользователь успешно изменен'
         ];
 
@@ -64,26 +66,22 @@ class UserController extends Controller
 
     public function getAuthorizedUser()
     {
-        $userLogin = Auth::user()['login'];
-        $user = User::where('login', $userLogin)->with('role')->with('employee')->get();
-
-        return $user;
+        return Auth::user()->where('login', Auth::user()->login)->with('role')->first();
     }
 
     public function getAll()
     {
-        return User::with('role')->with('employee')->get();
+        return response(User::with('role')->with('employee')->get(), 201);
     }
 
     public function getOne($id)
     {
-        $user = User::find($id);
-
-        if($user == null)
+        $user = User::where('id', $id)->with('role')->with('employee')->first();
+        if($user === null)
         {
             return response(['message' => "Пользователь с id=$id не найден"], 404);
         }
 
-        return response($user->with('role')->with('employee')->get(), 201);
+        return response($user, 201);
     }
 }

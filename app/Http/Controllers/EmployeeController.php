@@ -19,8 +19,10 @@ class EmployeeController extends Controller
 
         $employee = Employee::create($data);
 
+        $id = $employee->id;
+
         $response = [
-            'employee' => $employee,
+            'employee' => $employee->where('id', $id)->with('post')->first(),
             'message' => 'Сотрудник успешно создан'
         ];
 
@@ -41,8 +43,10 @@ class EmployeeController extends Controller
         $employee->update($data);
         $employee->save();
 
+        $employee_updated = Employee::where('id', $id)->with('post')->first();
+
         $response = [
-            'employee' => $employee,
+            'employee' => $employee_updated,
             'message' => 'Сотрудник успешно изменен'
         ];
 
@@ -65,12 +69,12 @@ class EmployeeController extends Controller
 
     public function getAll()
     {
-        return Employee::all();
+        return response(Employee::with('post')->get(), 201);
     }
 
     public function getOne($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::where('id', $id)->with('post')->first();
 
         if($employee == null)
         {

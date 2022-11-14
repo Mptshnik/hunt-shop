@@ -29,7 +29,8 @@ class UpdateEmployeeFormRequest extends FormRequest
             'middle_name' => 'nullable|string',
             'passport_series' => ['required', 'digits_between:4,4', Rule::unique('employees')->ignore($this->id)],
             'passport_number' => ['required', 'digits_between:6,6', Rule::unique('employees')->ignore($this->id)],
-            'birthday_date' => 'required|date:d-m-Y|before:today'
+            'birthday_date' => 'required|date:d-m-Y|before:today',
+            'post_id' => 'nullable|integer'
         ];
     }
 
@@ -58,7 +59,9 @@ class UpdateEmployeeFormRequest extends FormRequest
 
             'birthday_date.required' => 'Дата рождения обязательна',
             'birthday_date.date' => 'Формат даты ДД-ММ-ГГГГ',
-            'birthday.before' => 'Дата рождения не может быть больше сегодняшей'
+            'birthday.before' => 'Дата рождения не может быть больше сегодняшей',
+
+            'post_id.integer' => 'Некорректная должность'
         ];
     }
 }

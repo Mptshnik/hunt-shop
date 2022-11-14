@@ -41,4 +41,12 @@ Route::middleware('auth:sanctum')->group(function ()
     });
     Route::get('/authorized-user', [\App\Http\Controllers\UserController::class, 'getAuthorizedUser']);
 
+    Route::group(['prefix' => 'post'], function ()
+    {
+        Route::post('/create',[\App\Http\Controllers\PostController::class, 'store']);
+        Route::post('/delete/{id}',[\App\Http\Controllers\PostController::class, 'delete']);
+        Route::post('/update/{id}',[\App\Http\Controllers\PostController::class, 'update']);
+        Route::get('/all', [\App\Http\Controllers\PostController::class, 'getAll']);
+        Route::get('/{id}', [\App\Http\Controllers\PostController::class, 'getOne']);
+    });
 });
