@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Organisation extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+    protected $guarded = [];
+    public function client()
+    {
+        return $this->hasOne(Client::class);
+    }
 }

@@ -17,8 +17,10 @@ class UserController extends Controller
 
         $user = User::create($data);
 
+        $id = $user->id;
+
         $response = [
-            'user' => $user->with('role')->with('employee')->first(),
+            'user' => $user->where('id', $id)->with('role')->with('employee')->first(),
             'message' => 'Пользователь успешно создан'
         ];
 
