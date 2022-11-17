@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ClientApplicationForm\CreateClientApplicationFormRequest;
-use App\Http\Requests\ClientApplicationForm\UpdateClientApplicationFormRequest;
 use App\Http\Requests\PurchaseApplication\CreatePurchaseApplicationFormRequest;
 use App\Http\Requests\PurchaseApplication\UpdatePurchaseApplicationFormRequest;
-use App\Models\ClientApplicationForm;
 use App\Models\Employee;
 use App\Models\PurchaseApplication;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use function Sodium\add;
 
 class PurchaseApplicationController extends Controller
 {
@@ -17,17 +16,17 @@ class PurchaseApplicationController extends Controller
     {
         $data = $request->validated();
 
-        $employee_id = $data['employee_id'];
+        $employee_id = Auth::user()['employee_id'];
+
         $employee = Employee::find($employee_id);
         if($employee == null)
         {
-            return response(['message' => "Сотрудник с id=$employee_id не найден"], 404);
+            return response(['message' => 'Не удалось создать заявку.'.
+            'За вашим аккаунтом не закреплен сотрудник.'], 404);
         }
 
+        $data['employee_id'] = $employee_id;
         $purchaseApplication = PurchaseApplication::create($data);
-
-        //TODO присвоить id авторизованного пользователя
-        //$purchaseApplication->id = Auth::user()->employee_id;
 
         $id = $purchaseApplication->id;
 
@@ -41,7 +40,7 @@ class PurchaseApplicationController extends Controller
 
     public function update(UpdatePurchaseApplicationFormRequest $request, $id)
     {
-        $purchaseApplication = ClientApplicationForm::find($id);
+        $purchaseApplication = PurchaseApplication::find($id);
 
         if($purchaseApplication == null)
         {
@@ -50,13 +49,16 @@ class PurchaseApplicationController extends Controller
 
         $data = $request->validated();
 
-        $employee_id = $data['employee_id'];
+        $employee_id = Auth::user()['employee_id'];
+
         $employee = Employee::find($employee_id);
         if($employee == null)
         {
-            return response(['message' => "Сотрудник с id=$employee_id не найден"], 404);
+            return response(['message' => 'Не удалось обновить заявку.'.
+                'За вашим аккаунтом не закреплен сотрудник.'], 404);
         }
 
+        $data['employee_id'] = $employee_id;
 
         $purchaseApplication->update($data);
         $purchaseApplication->save();

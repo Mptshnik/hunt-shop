@@ -30,7 +30,7 @@ class CreateClientFormRequest extends FormRequest
             'last_name' => "required_if:juridical_status_id,==,$person_status",
             'first_name' => "required_if:juridical_status_id,==,$person_status",
             'middle_name' => 'nullable',
-            'phone_number' => 'required|digits_between:11,11|unique:organisations|unique:people',
+            'phone_number' => 'required|digits_between:11,11|unique:clients',
             'organisation_name' => "required_if:juridical_status_id,==,$organisation_status",
             'taxpayer_number' => 'required|digits_between:10,12|unique:clients',
             'juridical_address' => "max:255|required_if:juridical_status_id,==,$organisation_status",

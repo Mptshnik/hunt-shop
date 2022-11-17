@@ -68,7 +68,7 @@ class UserController extends Controller
 
     public function getAuthorizedUser()
     {
-        return Auth::user()->where('login', Auth::user()->login)->with('role')->first();
+        return Auth::user()->where('login', Auth::user()->login)->with('role')->with('employee')->first();
     }
 
     public function getAll()

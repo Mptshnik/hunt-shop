@@ -59,15 +59,6 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::get('/{id}', [\App\Http\Controllers\ClientController::class, 'getOne']);
     });
 
-    Route::group(['prefix' => '/client-application-form'], function ()
-    {
-        Route::post('/create',[\App\Http\Controllers\ClientApplicationFormController::class, 'store']);
-        Route::post('/delete/{id}',[\App\Http\Controllers\ClientApplicationFormController::class, 'delete']);
-        Route::post('/update/{id}',[\App\Http\Controllers\ClientApplicationFormController::class, 'update']);
-        Route::get('/all', [\App\Http\Controllers\ClientApplicationFormController::class, 'getAll']);
-        Route::get('/{id}', [\App\Http\Controllers\ClientApplicationFormController::class, 'getOne']);
-    });
-
     Route::group(['prefix' => '/provider'], function ()
     {
         Route::post('/create',[\App\Http\Controllers\ProviderController::class, 'store']);

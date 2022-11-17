@@ -24,7 +24,6 @@ class ClientController extends Controller
         {
             $organization = Organisation::create([
                 'name' => $data['organisation_name'],
-                'phone_number' => $data['phone_number']
             ]);
 
             $client->juridical_status_id = JuridicalStatus::IS_ORGANISATION;
@@ -32,6 +31,7 @@ class ClientController extends Controller
             $client->juridical_address = $data['juridical_address'];
             $client->physical_address = $data['physical_address'];
             $client->taxpayer_number = $data['taxpayer_number'];
+            $client->phone_number = $data['phone_number'];
         }
         else
         {
@@ -39,13 +39,13 @@ class ClientController extends Controller
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
                 'middle_name' => $data['middle_name'],
-                'phone_number' => $data['phone_number']
             ]);
 
             $client->juridical_status_id = JuridicalStatus::IS_PERSON;
             $client->person_id = $person->id;
             $client->physical_address = $data['physical_address'];
             $client->taxpayer_number = $data['taxpayer_number'];
+            $client->phone_number = $data['phone_number'];
         }
 
         $client->save();
@@ -91,7 +91,6 @@ class ClientController extends Controller
             $organisation = Organisation::find($organisation_id);
             $organisation->update([
                 'name' => $data['organisation_name'],
-                'phone_number' => $data['phone_number']
             ]);
             $organisation->save();
 
@@ -100,6 +99,7 @@ class ClientController extends Controller
             $client->juridical_address = $data['juridical_address'];
             $client->physical_address = $data['physical_address'];
             $client->taxpayer_number = $data['taxpayer_number'];
+            $client->phone_number = $data['phone_number'];
         }
         else
         {
@@ -108,7 +108,6 @@ class ClientController extends Controller
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
                 'middle_name' => $data['middle_name'],
-                'phone_number' => $data['phone_number']
             ]);
 
             $person->save();
@@ -117,6 +116,7 @@ class ClientController extends Controller
             $client->person_id = $person->id;
             $client->physical_address = $data['physical_address'];
             $client->taxpayer_number = $data['taxpayer_number'];
+            $client->phone_number = $data['phone_number'];
         }
 
         $client->update();

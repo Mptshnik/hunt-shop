@@ -27,7 +27,6 @@ class CreatePurchaseApplicationFormRequest extends FormRequest
             'name' => 'required|string|max:255',
             'number' => 'required|numeric|digits_between:8,8|unique:purchase_applications',
             'content' => 'required|max:1000',
-            'employee_id' => 'required|integer|min:0'
         ];
     }
 
@@ -45,10 +44,6 @@ class CreatePurchaseApplicationFormRequest extends FormRequest
 
             'content.required' => 'Содержание заявки обязательно',
             'content.max' => 'Максимальная длина содержания заявки 1000 символов',
-
-            'employee_id.required' => 'Код сотрудника обязателен',
-            'employee_id.integer' => 'Код сотрудника должен быть целым числом',
-            'employee_id.min' => 'Код сотрудника должен быть больше 0'
         ];
     }
 }
