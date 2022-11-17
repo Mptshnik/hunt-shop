@@ -11,10 +11,19 @@ class PurchaseApplication extends Model
 
     public function employee()
     {
-        return $this->hasOne(Employee::class);
+        return $this->belongsTo(Employee::class);
     }
 
+    protected $hidden = [
+        'updated_at',
+        'employee_id'
+    ];
+
+    protected $guarded = [
+        'id',
+    ];
+
     protected $casts = [
-      'created_at' => 'date:d-m-Y'
+        'created_at' => 'date:d-m-Y'
     ];
 }

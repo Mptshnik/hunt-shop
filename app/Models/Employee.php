@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,6 +20,11 @@ class Employee extends Model
     public function user()
     {
         return $this->hasOne(User::class);
+    }
+
+    public function clientApplicationForm()
+    {
+        return $this->hasOne(ClientApplicationForm::class);
     }
 
     protected $hidden = [
@@ -40,4 +46,9 @@ class Employee extends Model
     protected $casts = [
         'birthday_date' => 'datetime:d-m-Y'
     ];
+
+    public function setBirthdayDateAttribute($value)
+    {
+        $this->attributes['birthday_date'] = Carbon::createFromFormat('d-m-Y', $value)->format('Y-m-d');
+    }
 }

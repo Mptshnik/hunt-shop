@@ -43,10 +43,8 @@ class EmployeeController extends Controller
         $employee->update($data);
         $employee->save();
 
-        $employee_updated = Employee::where('id', $id)->with('post')->first();
-
         $response = [
-            'employee' => $employee_updated,
+            'employee' => $employee->where('id', $id)->with('post')->first(),
             'message' => 'Сотрудник успешно изменен'
         ];
 
