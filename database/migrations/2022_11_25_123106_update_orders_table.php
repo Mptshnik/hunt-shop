@@ -13,14 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('client_application_form_id')->nullable()->
-                constrained('client_application_forms')->onDelete('set null');
-            $table->string('name');
-            $table->string('number')->unique();
-
-            $table->timestamps();
+        Schema::table('orders', function (Blueprint $table) {
+            $table->string('number')->default('00000000')->change();
         });
     }
 

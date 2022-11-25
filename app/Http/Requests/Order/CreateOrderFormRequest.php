@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateOrderFormRequest extends FormRequest
 {
@@ -24,15 +25,16 @@ class CreateOrderFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => 'required|integer'
+            'client_id' => ['required', 'integer', Rule::exists('clients', 'id')],
         ];
     }
 
     public function messages()
     {
         return [
+            'client_id.exists' => 'Клиент с таким id не найден',
             'client_id.required' => 'ID покупателя обязателен',
-            'client_id.integer' => 'ID плкупателя должен быть целым числом'
+            'client_id.integer' => 'ID плкупателя должен быть целым числом',
         ];
     }
 }

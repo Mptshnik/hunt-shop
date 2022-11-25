@@ -120,4 +120,18 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::get('/all', [\App\Http\Controllers\ItemController::class, 'getAll']);
         Route::get('/{id}', [\App\Http\Controllers\ItemController::class, 'getOne']);
     });
+
+    Route::group(['prefix' => '/order'], function (){
+        Route::post('/confirm', [\App\Http\Controllers\OrderController::class, 'confirm']);
+        Route::get('/all', [\App\Http\Controllers\OrderController::class, 'getAll']);
+        Route::get('/{id}', [\App\Http\Controllers\OrderController::class, 'getOne']);
+    });
+
+    Route::group(['prefix' => '/cart'], function ()
+    {
+        Route::post('/add-item/{id}', [\App\Http\Controllers\CartController::class, 'addToCart']);
+        Route::post('/remove-item/{id}', [\App\Http\Controllers\CartController::class, 'removeFromCart']);
+        Route::post('/remove-all', [\App\Http\Controllers\CartController::class, 'removeAllFromCart']);
+        Route::get('/get', [\App\Http\Controllers\CartController::class, 'index']);
+    });
 });

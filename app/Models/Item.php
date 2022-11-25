@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,10 +16,24 @@ class Item extends Model
         'updated_at',
         'item_category_id',
         'item_invoice_id',
-        'promotion_id'
+        'promotion_id',
     ];
 
     public $timestamps = false;
+
+    public function getPriceForCount()
+    {
+        return $this->price * $this->pivot->count;
+    }
+
+    public function priceForCount() : Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->price * $this->pivot->count
+        );
+    }
+
+    protected $appends = ['price_for_count'];
 
     public function order()
     {
