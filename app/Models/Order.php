@@ -11,7 +11,7 @@ class Order extends Model
 
     public function items()
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsToMany(Item::class)->withPivot('count');
     }
 
     protected $casts = [

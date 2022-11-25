@@ -93,4 +93,31 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::get('/all', [\App\Http\Controllers\PurchaseApplicationController::class, 'getAll']);
         Route::get('/{id}', [\App\Http\Controllers\PurchaseApplicationController::class, 'getOne']);
     });
+
+    Route::group(['prefix' => '/item-invoice'], function ()
+    {
+        Route::post('/create',[\App\Http\Controllers\ItemInvoiceController::class, 'store']);
+        Route::post('/delete/{id}',[\App\Http\Controllers\ItemInvoiceController::class, 'delete']);
+        Route::post('/update/{id}',[\App\Http\Controllers\ItemInvoiceController::class, 'update']);
+        Route::get('/all', [\App\Http\Controllers\ItemInvoiceController::class, 'getAll']);
+        Route::get('/{id}', [\App\Http\Controllers\ItemInvoiceController::class, 'getOne']);
+    });
+
+    Route::group(['prefix' => '/item-category'], function ()
+    {
+        Route::post('/create',[\App\Http\Controllers\ItemCategoryController::class, 'store']);
+        Route::post('/delete/{id}',[\App\Http\Controllers\ItemCategoryController::class, 'delete']);
+        Route::post('/update/{id}',[\App\Http\Controllers\ItemCategoryController::class, 'update']);
+        Route::get('/all', [\App\Http\Controllers\ItemCategoryController::class, 'getAll']);
+        Route::get('/{id}', [\App\Http\Controllers\ItemCategoryController::class, 'getOne']);
+    });
+
+    Route::group(['prefix' => '/item'], function ()
+    {
+        Route::post('/create',[\App\Http\Controllers\ItemController::class, 'store']);
+        Route::post('/delete/{id}',[\App\Http\Controllers\ItemController::class, 'delete']);
+        Route::post('/update/{id}',[\App\Http\Controllers\ItemController::class, 'update']);
+        Route::get('/all', [\App\Http\Controllers\ItemController::class, 'getAll']);
+        Route::get('/{id}', [\App\Http\Controllers\ItemController::class, 'getOne']);
+    });
 });

@@ -12,4 +12,9 @@ class Seller extends Model
     public $timestamps = false;
 
     protected $guarded = ['id'];
+
+    public function itemInvoice()
+    {
+        return $this->hasOne(ItemInvoice::class);
+    }
 }

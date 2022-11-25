@@ -14,4 +14,9 @@ class Provider extends Model
     protected $guarded = [
         'id'
     ];
+
+    public function itemInvoice()
+    {
+        return $this->hasOne(ItemInvoice::class);
+    }
 }

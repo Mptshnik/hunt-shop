@@ -9,23 +9,34 @@ class Item extends Model
 {
     use HasFactory;
 
-    public function orders()
+    protected $guarded = ['id'];
+
+    protected $hidden = [
+        'updated_at',
+        'item_category_id',
+        'item_invoice_id',
+        'promotion_id'
+    ];
+
+    public $timestamps = false;
+
+    public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsToMany(Order::class);
     }
 
-    public function category()
+    public function itemCategory()
     {
-        return $this->hasOne(ItemCategory::class);
+        return $this->belongsTo(ItemCategory::class);
     }
 
     public function itemInvoice()
     {
-        return $this->hasOne(ItemInvoice::class);
+        return $this->belongsTo(ItemInvoice::class);
     }
 
     public function promotion()
     {
-        return $this->hasOne(Promotion::class);
+        return $this->belongsTo(Promotion::class);
     }
 }
