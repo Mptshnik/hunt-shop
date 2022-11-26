@@ -18,6 +18,7 @@ class SellerController extends Controller
         }
 
         $data = $request->validated();
+        $data['id'] = Seller::$SELLER_ID;
 
         $seller = Seller::create($data);
 

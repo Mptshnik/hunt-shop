@@ -9,17 +9,26 @@ class Invoice extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
+    protected $hidden = [
+        'seller_id',
+        'order_id',
+        'updated_at',
+    ];
+
     public function seller()
     {
-        return $this->hasOne(Seller::class);
+        return $this->belongsTo(Seller::class);
     }
 
     public function order()
     {
-        return $this->hasOne(Order::class);
+        return $this->belongsTo(Order::class);
     }
 
     protected $casts = [
-        'created_at' => 'date:d-m-Y'
+        'created_at' => 'datetime:d-m-Y H:m:s',
+        'date' => 'datetime:d-m-Y H:m:s'
     ];
 }

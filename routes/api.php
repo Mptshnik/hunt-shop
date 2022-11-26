@@ -134,4 +134,10 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::post('/remove-all', [\App\Http\Controllers\CartController::class, 'removeAllFromCart']);
         Route::get('/get', [\App\Http\Controllers\CartController::class, 'index']);
     });
+
+    Route::group(['prefix' => '/invoice'], function ()
+    {
+        Route::get('/all', [\App\Http\Controllers\InvoiceController::class, 'getAll']);
+        Route::get('/{id}', [\App\Http\Controllers\InvoiceController::class, 'getOne']);
+    });
 });

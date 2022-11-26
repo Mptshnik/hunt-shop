@@ -9,9 +9,14 @@ class Seller extends Model
 {
     use HasFactory;
 
+    public static int $SELLER_ID = 1;
+
     public $timestamps = false;
 
-    protected $guarded = ['id'];
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
 
     public function itemInvoice()
     {

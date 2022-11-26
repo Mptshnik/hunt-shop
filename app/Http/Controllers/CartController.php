@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class CartController extends Controller
 {
@@ -36,11 +37,12 @@ class CartController extends Controller
         if(is_null($orderId))
         {
             $order = Order::create();
-            $cookie = cookie('orderId', $order->id);
+//            $cookie = ;
 
             $order->items()->attach($item);
 
-            return response($order->items())->withCookie($cookie);
+            return response($order->where('id', $order->id)->with('items')->first())
+                ->withCookie(cookie('orderId', $order->id, 60*24));
         }
 
         $order = Order::find($orderId);

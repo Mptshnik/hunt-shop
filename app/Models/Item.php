@@ -17,6 +17,7 @@ class Item extends Model
         'item_category_id',
         'item_invoice_id',
         'promotion_id',
+        'pivot'
     ];
 
     public $timestamps = false;
@@ -26,6 +27,13 @@ class Item extends Model
         return $this->price * $this->pivot->count;
     }
 
+    public function itemsCount() : Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->pivot->count
+        );
+    }
+
     public function priceForCount() : Attribute
     {
         return new Attribute(
@@ -33,7 +41,10 @@ class Item extends Model
         );
     }
 
-    protected $appends = ['price_for_count'];
+    protected $appends = [
+        'price_for_count',
+        'items_count'
+    ];
 
     public function order()
     {

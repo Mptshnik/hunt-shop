@@ -12,7 +12,19 @@ class Order extends Model
 
     protected $hidden = [
         'updated_at',
+        'order_id',
+        'client_id'
     ];
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 
     public function items()
     {
@@ -35,7 +47,7 @@ class Order extends Model
     protected $appends = ['total_sum'];
 
     protected $casts = [
-        'created_at' => 'datetime:d-m-Y H-m-s',
-        'order_time' => 'datetime:d-m-Y H-m-s'
+        'created_at' => 'datetime:d-m-Y H:m:s',
+        'order_time' => 'datetime:d-m-Y H:m:s'
     ];
 }
