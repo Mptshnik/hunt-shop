@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function (){
     Route::post('login',[\App\Http\Controllers\AuthorizationController::class, 'login']);
+
+    Route::get('post/all', [\App\Http\Controllers\PostController::class, 'getAll']);
 });
 
 Route::middleware('auth:sanctum')->group(function ()
@@ -46,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::post('/create',[\App\Http\Controllers\PostController::class, 'store']);
         Route::post('/delete/{id}',[\App\Http\Controllers\PostController::class, 'delete']);
         Route::post('/update/{id}',[\App\Http\Controllers\PostController::class, 'update']);
-        Route::get('/all', [\App\Http\Controllers\PostController::class, 'getAll']);
+
         Route::get('/{id}', [\App\Http\Controllers\PostController::class, 'getOne']);
     });
 
