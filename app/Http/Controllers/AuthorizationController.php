@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+//use Illuminate\Support\Facades\Cookie;
 
 class AuthorizationController extends Controller
 {
@@ -15,9 +16,10 @@ class AuthorizationController extends Controller
             'password' => $request['password']
         ];
 
+
         if(!Auth::attempt($data))
         {
-            return response(['message' => 'Неправильный логин или пароль'], 401);
+            return response(['message' => 'Неправильный логин или пароль']);
         }
 
         $user = User::where('login', $request['login'])->first();

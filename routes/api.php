@@ -18,12 +18,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function (){
     Route::post('login',[\App\Http\Controllers\AuthorizationController::class, 'login']);
 
-    Route::get('post/all', [\App\Http\Controllers\PostController::class, 'getAll']);
+
 });
 
 Route::middleware('auth:sanctum')->group(function ()
 {
     Route::get('logout',[\App\Http\Controllers\AuthorizationController::class, 'logout']);
+
+    Route::get('post/all', [\App\Http\Controllers\PostController::class, 'getAll']);
 
     Route::group(['prefix' => '/employee'], function (){
         Route::post('/create', [\App\Http\Controllers\EmployeeController::class, 'store']);
