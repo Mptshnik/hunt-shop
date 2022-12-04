@@ -22,7 +22,7 @@ class AuthorizationController extends Controller
             return response(['message' => 'Неправильный логин или пароль']);
         }
 
-        $user = User::where('login', $request['login'])->first();
+        $user = User::where('login', $request['login'])->with('role')->first();
 
         $token = $user->createToken('JWT')->plainTextToken;
 

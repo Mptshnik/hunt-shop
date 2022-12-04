@@ -41,15 +41,6 @@ class User extends Authenticatable
         'employee_id'
     ];
 
-    protected $visible = [
-        'id',
-        'login',
-        'created_at',
-        'updated_at',
-        'role',
-        'employee'
-    ];
-
     /**
      * The attributes that should be cast.
      *

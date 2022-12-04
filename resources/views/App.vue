@@ -5,10 +5,9 @@
 </template>
 
 <script>
-import Test from "./components/Test.vue";
 import BasicLayout from "./components/layouts/BasicLayout.vue";
 export default {
-    components: {BasicLayout, Test}
+    components: {BasicLayout},
 }
 </script>
 

@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function (){
     Route::post('login',[\App\Http\Controllers\AuthorizationController::class, 'login']);
-
+    Route::get('roles', function (){
+        return \App\Models\Role::all();
+    });
 
 });
 

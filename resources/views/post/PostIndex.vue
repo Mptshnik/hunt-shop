@@ -33,7 +33,7 @@ export default
     <div class="container">
         <router-link to="/posts/create" class="btn btn-dark mb-1">Добавить</router-link>
         <div>
-            <table class="table table-dark table-hover" style="border-radius: 30px">
+            <table class="table table-dark table-hover">
                 <thead>
                 <tr>
                     <th scope="col">Название</th>
@@ -44,7 +44,11 @@ export default
                 <tbody>
                 <tr class="table-active" v-for="post in posts" :key="post.id">
                     <td>{{ post.name }}</td>
-                    <td>{{ post.description }}</td>
+                    <td>
+                        <div class="content">
+                            {{ post.description }}
+                        </div>
+                    </td>
                     <td>
                         <button @click="deletePost(post.id)" class="btn btn-danger">Удалить</button>
                         <button class="ms-1 btn btn-secondary">Изменить</button>
@@ -59,5 +63,18 @@ export default
 
 
 <style scoped>
+.content{
+    word-wrap:break-word; /*old browsers*/
+    overflow-wrap:break-word;
+    word-break: break-all;
+    max-width: 700px;
+}
 
+table{
+    width:100%; /*must be set (to any value)*/
+}
+
+.overflow-wrap-hack{
+    max-width: 700px;
+}
 </style>

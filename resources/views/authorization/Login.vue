@@ -54,22 +54,28 @@ export default {
                 }
                 else {
                     localStorage.setItem('JWT', res.data.token);
-                    //axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('JWT');
+                    localStorage.setItem('USER_ROLE_ID', res.data.user.role.id);
 
+                     console.log(res.data.user.role.id)
+                    //axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('JWT');
                     router.push('/');
+                    router.go(0)
                 }
             });
         }
     },
     beforeRouteEnter(to, from, next)
     {
-        const token = axios.defaults.headers['Authorization'];
+        const token = localStorage.getItem('JWT');
 
         if(token)
         {
             next('/');
         }
-        else next();
+        else
+        {
+            next();
+        }
     }
 }
 </script>

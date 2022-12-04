@@ -3,38 +3,40 @@
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
-                    <div class="navbar-brand">HuntShop|Management</div>
-                    <div class="collapse navbar-collapse" id="navbarColor02">
-                        <ul class="navbar-nav me-auto">
-                            <li class="nav-item">
-                                <router-link to="/" class="nav-link active" href="#">Главная
-                                    <span class="visually-hidden">(current)</span>
-                                </router-link>
-                            </li>
-                            <li class="nav-item">
-                                <router-link to="/posts" class="nav-link" href="#">Должности</router-link>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Pricing</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">About</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a>
-                                </div>
+                    <a class="navbar-brand" href="/">HuntShop|Management</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div v-if="isLoggedIn" class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                        <ul class="navbar-nav">
+                            <li v-for="item in navBarItems" class="nav-item dropdown">
+                                <router-link v-if="item.path && userHasAnyRole(item.roles)" :to="item.path" class="nav-link" aria-current="page">{{item.title}}</router-link>
+                                <a v-if="item.children && userHasAnyRole(item.roles)" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{item.title}}
+                                </a>
+                                <ul v-if="item.children" class="dropdown-menu dropdown-menu-dark">
+                                    <li v-for="child in item.children">
+                                        <router-link v-if="userHasAnyRole(child.roles)" class="dropdown-item" :to="child.path">{{child.title}}</router-link>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
-                        <form class="d-flex">
-                            <input class="form-control me-sm-2" type="text" placeholder="Search">
-                            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                        </form>
+
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                    Аккаунт
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark">
+                                    <li>
+                                        <form @submit.prevent="logout" method="get">
+                                            <button type="submit" class="dropdown-item">Выйти</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </nav>
@@ -46,20 +48,59 @@
 </template>
 
 <script>
+import router from "/resources/router";
+import axios from "axios";
+import navBarItems from "../../../helper/navBarItems";
+
 export default {
-    name: "BasicLayout"
+    data(){
+        let isLoggedIn = false;
+        let userRole = parseInt(localStorage.getItem('USER_ROLE_ID'))
+
+
+        console.log(userRole)
+
+        return{
+            isLoggedIn,
+            userRole,
+            navBarItems
+        }
+    },
+    name: "BasicLayout",
+    methods:{
+        logout()
+        {
+            axios.get('/logout');
+            localStorage.removeItem('JWT');
+            localStorage.removeItem('USER_ROLE_ID');
+
+            router.push('/login');
+        },
+
+        userHasAnyRole(roles)
+        {
+            return roles.includes(this.userRole) || roles.length === 0;
+        }
+    },
+    watch: {
+        $route: {
+            immediate: true,
+            handler(to, from) {
+                if(this.$route.path === '/login') {
+                    this.isLoggedIn = false;
+                } else {
+                    this.isLoggedIn = true;
+                }
+            }
+        }
+    },
 }
 </script>
 
 <style scoped>
-.navbar-custom
-{
-    background-color: #313335;
-}
-footer {
-    position: absolute;
-    bottom: 0px;
-    width: 100%;
-    height: 55px;
+
+.dropdown-menu{
+    right: 0;
+    left: auto;
 }
 </style>
