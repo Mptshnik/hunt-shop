@@ -1,5 +1,8 @@
 <template>
     <div class="container" style="width: 40%; margin: 0 auto">
+        <div class="text-danger" v-if="errors">
+            {{errors}}
+        </div>
         <form @submit.prevent="savePost">
             <div class="mb-3">
                 <label class="form-label text-white">Название должности</label>

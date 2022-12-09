@@ -5,6 +5,164 @@ import roles from "../helper/roles";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+      {
+          path: '/income-statistics',
+          name: 'IncomeIndex',
+          component: () => import("../views/statistics/IncomeIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.ACCOUNTANT
+              ]
+          }
+      },
+      {
+          path: '/expenses-statistics',
+          name: 'ExpensesIndex',
+          component: () => import("../views/statistics/ExpensesIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.ACCOUNTANT
+              ]
+          }
+      },
+      {
+          path: '/purchases-statistics',
+          name: 'PurchasesIndex',
+          component: () => import("../views/statistics/PurchasesIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.ACCOUNTANT,
+                  roles.PURCHASING_MANAGER
+              ]
+          }
+      },
+      {
+          path: '/sales-statistics',
+          name: 'SalesIndex',
+          component: () => import("../views/statistics/SalesIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.ACCOUNTANT,
+                  roles.SALES_MANAGER
+              ]
+          }
+      },
+      {
+          path: '/item-invoices',
+          name: 'ItemInvoiceIndex',
+          component: () => import("../views/item-invoice/ItemInvoiceIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.PURCHASING_MANAGER,
+                  roles.ACCOUNTANT
+              ]
+          }
+      },
+      {
+          path: '/invoices',
+          name: 'InvoiceIndex',
+          component: () => import("../views/invoice/InvoiceIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.SALES_MANAGER,
+                  roles.ACCOUNTANT
+              ]
+          }
+      },
+      {
+          path: '/applications',
+          name: 'ApplicationIndex',
+          component: () => import("../views/application/ApplicationIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.PURCHASING_MANAGER
+              ]
+          }
+      },
+      {
+          path: '/providers',
+          name: 'ProviderIndex',
+          component: () => import("../views/provider/ProviderIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.PURCHASING_MANAGER
+              ]
+          }
+      },
+      {
+          path: '/clients',
+          name: 'ClientIndex',
+          component: () => import("../views/clients/ClientIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.SALES_MANAGER
+              ]
+          }
+      },
+      {
+          path: '/orders',
+          name: 'OrderIndex',
+          component: () => import("../views/orders/OrderIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.SALES_MANAGER
+              ]
+          }
+      },
+      {
+          path: '/promotions',
+          name: 'PromotionIndex',
+          component: () => import("../views/promotion/PromotionIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.MARKETING_MANAGER
+              ]
+          }
+      },
+      {
+          path: '/item-categories',
+          name: 'CategoryIndex',
+          component: () => import("../views/category/CategoryIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.MARKETING_MANAGER
+              ]
+          }
+      },
+      {
+          path: '/items',
+          name: 'ItemIndex',
+          component: () => import("../views/item/ItemIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+                  roles.PURCHASING_MANAGER
+              ]
+          }
+      },
+      {
+        path: '/employees',
+        name: 'EmployeeIndex',
+        component: () => import("../views/employee/EmployeeIndex.vue"),
+        meta:{
+            roles: [
+                roles.ADMIN,
+                roles.HR
+            ]
+        }
+      },
     {
         path: '/posts',
         name: 'PostIndex',
@@ -19,12 +177,25 @@ const router = createRouter({
     {
         path: '/posts/create',
         name: 'PostCreate',
-        component: () => import("../views/post/PostCreate.vue")
+        component: () => import("../views/post/PostCreate.vue"),
+        meta:{
+            roles:[
+                roles.ADMIN,
+                roles.HR
+            ]
+        }
     },
     {
         path: '/posts/:id/edit',
         name: 'PostEdit',
-        component: () => import("../views/post/PostUpdate.vue")
+        component: () => import("../views/post/PostUpdate.vue"),
+        meta:{
+            roles:[
+                roles.ADMIN,
+                roles.HR
+            ]
+        },
+        props: true
     },
     {
         path: '/login',

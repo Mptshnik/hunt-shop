@@ -51,7 +51,7 @@ export default
                     </td>
                     <td>
                         <button @click="deletePost(post.id)" class="btn btn-danger">Удалить</button>
-                        <button class="ms-1 btn btn-secondary">Изменить</button>
+                        <router-link class="ms-1 btn btn-secondary" :to="{ name: 'PostEdit', params: { id: post.id }}">Изменить</router-link>
                     </td>
                 </tr>
                 </tbody>
