@@ -6,6 +6,36 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
       {
+          path: '/users/:id/edit',
+          name: 'UserEdit',
+          component: () => import("../views/user/UserEdit.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN
+              ]
+          }
+      },
+      {
+          path: '/users',
+          name: 'UserIndex',
+          component: () => import("../views/user/UserIndex.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN
+              ]
+          }
+      },
+      {
+          path: '/users/create',
+          name: 'UserCreate',
+          component: () => import("../views/user/UserCreate.vue"),
+          meta:{
+              roles: [
+                  roles.ADMIN,
+              ]
+          }
+      },
+      {
           path: '/income-statistics',
           name: 'IncomeIndex',
           component: () => import("../views/statistics/IncomeIndex.vue"),

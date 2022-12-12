@@ -1,6 +1,6 @@
 <template>
     <div class="container" style="width: 40%; margin: 0 auto">
-        <div class="text-danger" v-if="errors">
+        <div v-if="errors" class="text-danger">
             {{errors}}
         </div>
         <form @submit.prevent="savePost">
@@ -20,8 +20,8 @@
 <script>
 import {reactive} from 'vue';
 import usePosts from "../../composable/posts";
-import axios from "axios";
-//axios.defaults.headers.common['Authorization'] = 'Bearer 2|EJ5vH08DvVrAJyacg3U1ebkB7G2ZKn3sQwSuBn7I'
+
+
 export default {
     name: "PostCreate",
     setup()

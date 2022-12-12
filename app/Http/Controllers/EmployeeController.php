@@ -29,6 +29,11 @@ class EmployeeController extends Controller
         return response($response, 201);
     }
 
+    private function getEmployee($id) : Employee
+    {
+        return Employee::where('id', $id)->with('post')->first();
+    }
+
     public function update(UpdateEmployeeFormRequest $request, $id)
     {
         $employee = Employee::find($id);
@@ -67,6 +72,7 @@ class EmployeeController extends Controller
 
     public function getAll()
     {
+
         return response(Employee::with('post')->get(), 201);
     }
 
