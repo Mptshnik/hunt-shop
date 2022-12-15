@@ -22,7 +22,7 @@ class PurchaseApplicationController extends Controller
         if($employee == null)
         {
             return response(['message' => 'Не удалось создать заявку.'.
-            'За вашим аккаунтом не закреплен сотрудник.'], 404);
+            'За вашим аккаунтом не закреплен сотрудник.'], 422);
         }
 
         $data['employee_id'] = $employee_id;

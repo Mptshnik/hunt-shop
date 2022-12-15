@@ -9,6 +9,8 @@ class Seller extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public static int $SELLER_ID = 1;
 
     public $timestamps = false;

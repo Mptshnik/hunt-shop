@@ -2,6 +2,8 @@
 <script>
 import axios from 'axios';
 import { ref, onMounted, reactive } from 'vue';
+import useSorting from "../../helper/sorting";
+import useSearching from "../../helper/searching";
 
 export default {
     setup()
@@ -9,8 +11,12 @@ export default {
         const errors = ref([]);
         const employee = ref([]);
         const posts = ref([]);
+        const rawEmployees = ref([]);
         const employees = ref([]);
         const editing = ref(false);
+        const {sortRecords} = useSorting();
+        const {onSearch} = useSearching();
+
         const form = reactive({
             'last_name': '',
             'first_name': '',
@@ -57,7 +63,8 @@ export default {
         const getEmployees = async () =>
         {
             await axios.get('employee/all').then(res => {
-                employees.value = res.data;
+                rawEmployees.value = res.data;
+                employees.value = rawEmployees.value
             });
         }
 
@@ -129,6 +136,14 @@ export default {
             }
         }
 
+        const handleSearch = (e) => {
+            onSearch(employees, rawEmployees, e);
+        }
+
+        const sortTable  = (index) => {
+            sortRecords(employees, rawEmployees, index);
+        }
+
         onMounted(()=> {
             getEmployees();
             getPosts()
@@ -143,7 +158,9 @@ export default {
             errors,
             editEmployee,
             deleteEmployee,
-            posts
+            posts,
+            sortTable,
+            handleSearch
         }
     }
 }
@@ -154,15 +171,20 @@ export default {
         <div>
             <h1 class="card-title text-white mb-3">Сотрудники</h1>
         </div>
-        <button type="button" class="btn btn-dark mb-1" @click="addEmployee">
-            Добавить
-        </button>
+        <div class="row g-3 align-items-center mb-3">
+            <div class="col-auto">
+                <button @click="addEmployee" class="btn btn-dark">Добавить</button>
+            </div>
+            <div class="col-auto">
+                <input type="text" class="form-control" placeholder="Поиск" @input="handleSearch">
+            </div>
+        </div>
         <div>
             <table class="table table-dark table-hover table-sm">
                 <thead>
                 <tr>
-                    <th scope="col">ФИО</th>
-                    <th scope="col">Серия и номер паспорта</th>
+                    <th scope="col" v-on:click="sortTable('last_name')">ФИО</th>
+                    <th scope="col" v-on:click="sortTable('passport_series')">Серия и номер паспорта</th>
                     <th scope="col">Должность</th>
                     <th class="text-end">Действия</th>
                 </tr>
@@ -228,10 +250,10 @@ export default {
                         </div>
                         <div class="form-group">
                             <label class="form-label">Дата рождения</label>
-                            <input v-model="form.birthday_date" type="text" class="form-control" placeholder="дата рождения"/>
+                            <input v-model="form.birthday_date" type="text" class="form-control" placeholder="дата рождения (ДД-ММ-ГГГГ)"/>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Выберите роль</label>
+                            <label class="form-label">Выберите должность</label>
                             <select v-if="editing" class="form-select" v-model="form.post_id" aria-label="Default select example">
                                 <option v-for="post in posts" :value=post.id
                                         :selected="post.id === form.post_id">{{post.name}}</option>

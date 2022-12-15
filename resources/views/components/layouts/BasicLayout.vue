@@ -57,9 +57,6 @@ export default {
         let isLoggedIn = false;
         let userRole = parseInt(localStorage.getItem('USER_ROLE_ID'))
 
-
-        console.log(userRole)
-
         return{
             isLoggedIn,
             userRole,

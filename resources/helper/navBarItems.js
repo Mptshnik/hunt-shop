@@ -9,6 +9,11 @@ const navBarItems = [
         roles: []
     },
     {
+        title: 'Организация',
+        path: '/organization',
+        roles: [roles.ADMIN]
+    },
+    {
         title: 'Кадры',
         roles: [roles.ADMIN, roles.HR],
         children:[
@@ -63,7 +68,12 @@ const navBarItems = [
                 title: 'Заказы',
                 path: '/orders',
                 roles: [roles.ADMIN, roles.SALES_MANAGER]
-            }
+            },
+            {
+                title: 'Корзина',
+                roles: [roles.ADMIN, roles.SALES_MANAGER],
+                path: '/cart'
+            },
         ]
     },
     {
@@ -124,11 +134,7 @@ const navBarItems = [
             },
         ]
     },
-    {
-        title: 'Корзина',
-        roles: [roles.ADMIN, roles.SALES_MANAGER],
-        path: '/cart'
-    },
+
 ]
 
 export default navBarItems

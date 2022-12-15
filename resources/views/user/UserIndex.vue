@@ -1,10 +1,9 @@
 <script>
-import usePosts from "../../composable/posts";
 import {onMounted, reactive, ref} from "vue";
 import axios from "axios";
 import roles from "/resources/helper/roles.js";
-import useUsers from "../../composable/users";
-import UserCreate from "./UserCreate.vue";
+import useSorting from "../../helper/sorting";
+import useSearching from "../../helper/searching";
 
 export default
 {
@@ -13,7 +12,11 @@ export default
         const editing = ref([]);
         const errors = ref([]);
         const user = ref([]);
+        const rawUsers = ref([]);
         const users = ref([]);
+        const {sortRecords} = useSorting();
+        const {onSearch} = useSearching();
+
         const form = reactive({
             'login': '',
             'password': '',
@@ -34,7 +37,8 @@ export default
         const getUsers = () =>
         {
             axios.get('user/all').then(res => {
-                users.value = res.data
+                users.value = res.data;
+                rawUsers.value = users.value;
             });
         }
 
@@ -115,6 +119,14 @@ export default
             }
         }
 
+        const handleSearch = (e) => {
+            onSearch(users, rawUsers, e);
+        }
+
+        const sortTable  = (index) => {
+            sortRecords(users, rawUsers, index);
+        }
+
         onMounted(getUsers);
 
         return{
@@ -126,7 +138,9 @@ export default
             addUser,
             editUser,
             handleSubmit,
-            roles
+            roles,
+            handleSearch,
+            sortTable
         }
     }
 }
@@ -138,15 +152,20 @@ export default
         <div>
             <h1 class="card-title text-white mb-3">Пользователи</h1>
         </div>
-        <button type="button" class="btn btn-dark mb-1" @click="addUser">
-            Добавить
-        </button>
+        <div class="row g-3 align-items-center mb-3">
+            <div class="col-auto">
+                <button @click="addUser" class="btn btn-dark">Добавить</button>
+            </div>
+            <div class="col-auto">
+                <input type="text" class="form-control" placeholder="Поиск" @input="handleSearch">
+            </div>
+        </div>
         <div>
             <table class="table table-dark table-hover table-sm">
                 <thead>
                 <tr>
-                    <th scope="col">Логин</th>
-                    <th scope="col">Дата регистрации</th>
+                    <th scope="col" v-on:click="sortTable('login')">Логин</th>
+                    <th scope="col" v-on:click="sortTable('created_at')">Дата регистрации</th>
                     <th class="text-end">Действия</th>
                 </tr>
                 </thead>
