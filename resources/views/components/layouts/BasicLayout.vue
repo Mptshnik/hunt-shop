@@ -11,13 +11,21 @@
                     <div v-if="isLoggedIn" class="collapse navbar-collapse" id="navbarNavDarkDropdown">
                         <ul class="navbar-nav">
                             <li v-for="item in navBarItems" class="nav-item dropdown">
-                                <router-link v-if="item.path && userHasAnyRole(item.roles)" :to="item.path" class="nav-link" aria-current="page">{{item.title}}</router-link>
-                                <a v-if="item.children && userHasAnyRole(item.roles)" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{item.title}}
+                                <router-link
+                                    v-if="item.path && item.roles.includes(userRole) || item.roles.length === 0"
+                                    :to="item.path" class="nav-link" aria-current="page">{{ item.title }}
+                                </router-link>
+                                <a v-if="item.children && item.roles.includes(userRole)"
+                                   class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    {{ item.title }}
                                 </a>
                                 <ul v-if="item.children" class="dropdown-menu dropdown-menu-dark">
                                     <li v-for="child in item.children">
-                                        <router-link v-if="userHasAnyRole(child.roles)" class="dropdown-item" :to="child.path">{{child.title}}</router-link>
+                                        <router-link
+                                            v-if="item.roles.includes(userRole) || item.roles.length === 0"
+                                            class="dropdown-item" :to="child.path">{{ child.title }}
+                                        </router-link>
                                     </li>
                                 </ul>
                             </li>
@@ -51,46 +59,46 @@
 import router from "/resources/router";
 import axios from "axios";
 import navBarItems from "../../../helper/navBarItems";
+import {onMounted, reactive, ref} from "vue";
 
 export default {
-    data(){
-        let isLoggedIn = false;
-        let userRole = parseInt(localStorage.getItem('USER_ROLE_ID'))
+    setup()
+    {
+        let role = parseInt(localStorage.getItem('USER_ROLE_ID'));
 
-        return{
-            isLoggedIn,
-            userRole,
-            navBarItems
-        }
-    },
-    name: "BasicLayout",
-    methods:{
-        logout()
+        const isLoggedIn = ref(false);
+        const userRole = ref(role);
+
+        const logout = () =>
         {
             axios.get('/logout');
             localStorage.removeItem('JWT');
             localStorage.removeItem('USER_ROLE_ID');
+            isLoggedIn.value = false;
 
             router.push('/login');
-        },
+        }
 
-        userHasAnyRole(roles)
-        {
-            return roles.includes(this.userRole) || roles.length === 0;
+        return{
+            isLoggedIn,
+            userRole,
+            logout,
+            navBarItems
         }
     },
-    watch: {
+    watch:{
         $route: {
             immediate: true,
             handler(to, from) {
-                if(this.$route.path === '/login') {
+                if (this.$route.path === '/login') {
                     this.isLoggedIn = false;
                 } else {
                     this.isLoggedIn = true;
+                    this.userRole = parseInt(localStorage.getItem('USER_ROLE_ID'));
                 }
             }
         }
-    },
+    }
 }
 </script>
 

@@ -56,7 +56,6 @@ export default {
                     localStorage.setItem('JWT', res.data.token);
                     localStorage.setItem('USER_ROLE_ID', res.data.user.role.id);
                     router.push('/');
-                    router.go(0)
                 }
             });
         }
