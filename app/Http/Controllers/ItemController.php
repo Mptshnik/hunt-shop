@@ -21,6 +21,16 @@ class ItemController extends Controller
         ]);
     }
 
+    public function validateItem(CreateItemFormRequset $requset)
+    {
+        $requset->validated();
+
+        return response([
+            'message' => 'ok',
+            'item' => $requset->validated()
+        ]);
+    }
+
     public function update(CreateItemFormRequset $requset, $id)
     {
         $item = Item::find($id);

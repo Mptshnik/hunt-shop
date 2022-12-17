@@ -7,6 +7,7 @@ import useSearching from "../../helper/searching";
 export default {
     setup()
     {
+        const isLoading = ref(true);
         const editing = ref([]);
         const errors = ref([]);
         const application = ref([]);
@@ -35,7 +36,6 @@ export default {
             form.name = '';
             form.content = '';
             form.number = '';
-           // form.address = '';
         }
 
         errors.value = null;
@@ -45,6 +45,7 @@ export default {
             await axios.get('purchase-application/all').then(res => {
                 rawApplications.value = res.data
                 applications.value = rawApplications.value;
+                isLoading.value = false;
             });
         }
 
@@ -153,7 +154,8 @@ export default {
             editing,
             handleSubmit,
             handleSearch,
-            sortTable
+            sortTable,
+            isLoading
         }
     }
 }
@@ -183,7 +185,12 @@ export default {
                     <th class="text-end">Действия</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="isLoading">
+                <h1 class="text-white mt-2">
+                    Загрузка...
+                </h1>
+                </tbody>
+                <tbody v-else>
                 <tr class="table-active" v-for="application in applications" :key="application.id">
                     <td>
                         {{ application.name }}

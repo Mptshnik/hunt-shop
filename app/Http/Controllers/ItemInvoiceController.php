@@ -5,11 +5,32 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ItemInvoice\CreateItemInvoiceFormRequest;
 use App\Http\Requests\ItemInvoice\UpdateItemInvoiceFormRequest;
 use App\Models\Employee;
+use App\Models\Item;
 use App\Models\ItemInvoice;
 use Illuminate\Http\Request;
 
 class ItemInvoiceController extends Controller
 {
+    public function storeWithItems(CreateItemInvoiceFormRequest $request)
+    {
+        $data = $request->validated();
+
+        $itemInvoice = ItemInvoice::create($data);
+
+        foreach ($request->items as $item) {
+            $item['item_invoice_id'] = $itemInvoice['id'];
+            Item::create($item);
+        }
+
+        $response = [
+            'item_invoice' => $itemInvoice->where('id', $itemInvoice->id)
+                ->with('seller')->with('provider')->first(),
+            'message' => 'Товарная накладная успешно создана'
+        ];
+
+        return response($response);
+    }
+
     public function store(CreateItemInvoiceFormRequest $request)
     {
         $data = $request->validated();

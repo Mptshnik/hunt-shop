@@ -27,18 +27,24 @@ class Item extends Model
         return $this->price * $this->pivot->count;
     }
 
-    public function itemsCount() : Attribute
+    public function itemsCount():Attribute
     {
-        return new Attribute(
-            get: fn () => $this->pivot->count
-        );
+        if(!is_null($this->pivot))
+        {
+            return Attribute::make(fn()=>$this->pivot->count);
+        }
+
+        return Attribute::make(fn()=>$this->count);
     }
 
-    public function priceForCount() : Attribute
+    public function priceForCount(): Attribute
     {
-        return new Attribute(
-            get: fn () => $this->price * $this->pivot->count
-        );
+        if(!is_null($this->pivot))
+        {
+            return Attribute::make(fn () => $this->price * $this->pivot->count);
+        }
+
+        return Attribute::make(fn () => $this->price * $this->count);
     }
 
     protected $appends = [

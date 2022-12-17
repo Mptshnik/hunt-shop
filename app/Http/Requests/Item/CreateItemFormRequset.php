@@ -27,11 +27,11 @@ class CreateItemFormRequset extends FormRequest
         return [
             'item_category_id' => ['required', 'integer', 'min:0', Rule::exists('item_categories', 'id')],
             'promotion_id' => ['nullable', 'integer', 'min:0', Rule::exists('promotions', 'id')],
-            'item_invoice_id' => ['required', 'integer', 'min:0', Rule::exists('item_invoices', 'id')],
+            'item_invoice_id' => ['required', 'integer', 'min:0', /*Rule::exists('item_invoices', 'id')*/],
             'name' => ['required', 'string', 'max:255', Rule::unique('items')->ignore($this->id)],
             'number' => ['required', 'digits_between:8,8', Rule::unique('items')->ignore($this->id)],
             'count' => 'required|integer|min:1|max:1000000000',
-            'description' => 'required|max:1000',
+            'description' => 'max:1000',
             'price' => 'required|numeric',
             'sale_price' => 'nullable|numeric',
             'image' => 'nullable'
@@ -53,7 +53,7 @@ class CreateItemFormRequset extends FormRequest
             'item_invoice_id.required' => 'Товарная накладаная обязательна',
             'item_invoice_id.integer' => 'ID товарной накладной должен быть целочисленным',
             'item_invoice_id.min' => 'ID товарной накладной должен быть больше либо равен 0',
-            'item_invoice_id.exists' => 'Товарная накладная с таким ID не найдена',
+            //'item_invoice_id.exists' => 'Товарная накладная с таким ID не найдена',
 
             'name.required' => 'Наименование товара обязательно',
             'name.string' => 'Наименование должно быть строкой',
@@ -69,7 +69,6 @@ class CreateItemFormRequset extends FormRequest
             'count.min' => 'Минимальное количетсво товара 1',
             'count.max' => 'Максимальное количетсво товара 1 000 000 000',
 
-            'description.required' => 'Описание обязательно',
             'description.max' => 'Максимальная длина описания 1000 символов',
 
             'price.required' => 'Стоимоить обязательна',

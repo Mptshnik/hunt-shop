@@ -25,6 +25,7 @@ Route::middleware('guest')->group(function (){
 
 Route::middleware('auth:sanctum')->group(function ()
 {
+
     Route::get('logout',[\App\Http\Controllers\AuthorizationController::class, 'logout']);
 
     Route::get('post/all', [\App\Http\Controllers\PostController::class, 'getAll']);
@@ -102,6 +103,7 @@ Route::middleware('auth:sanctum')->group(function ()
 
     Route::group(['prefix' => '/item-invoice'], function ()
     {
+        Route::post('/create-with',[\App\Http\Controllers\ItemInvoiceController::class, 'storeWithItems']);
         Route::post('/create',[\App\Http\Controllers\ItemInvoiceController::class, 'store']);
         Route::post('/delete/{id}',[\App\Http\Controllers\ItemInvoiceController::class, 'delete']);
         Route::post('/update/{id}',[\App\Http\Controllers\ItemInvoiceController::class, 'update']);
@@ -120,6 +122,7 @@ Route::middleware('auth:sanctum')->group(function ()
 
     Route::group(['prefix' => '/item'], function ()
     {
+        Route::post('/validate',[\App\Http\Controllers\ItemController::class, 'validateItem']);
         Route::post('/create',[\App\Http\Controllers\ItemController::class, 'store']);
         Route::post('/delete/{id}',[\App\Http\Controllers\ItemController::class, 'delete']);
         Route::post('/update/{id}',[\App\Http\Controllers\ItemController::class, 'update']);

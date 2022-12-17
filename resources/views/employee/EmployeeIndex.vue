@@ -1,6 +1,7 @@
 
 <script>
 import axios from 'axios';
+import roles from "/resources/helper/roles.js";
 import { ref, onMounted, reactive } from 'vue';
 import useSorting from "../../helper/sorting";
 import useSearching from "../../helper/searching";
@@ -8,8 +9,10 @@ import useSearching from "../../helper/searching";
 export default {
     setup()
     {
-        const errors = ref([]);
+        const isLoading = ref(true);
+        const errors = ref(null);
         const employee = ref([]);
+        const authorizedUser = ref([]);
         const posts = ref([]);
         const rawEmployees = ref([]);
         const employees = ref([]);
@@ -38,7 +41,13 @@ export default {
             form.post_id = '';
         }
 
-        errors.value = null;
+        const getAuthorizedUser = async () =>
+        {
+            await axios.get('/authorized-user').then(res => {
+                authorizedUser.value = res.data
+            });
+        }
+
 
         const getEmployee = (id) =>
         {
@@ -64,7 +73,8 @@ export default {
         {
             await axios.get('employee/all').then(res => {
                 rawEmployees.value = res.data;
-                employees.value = rawEmployees.value
+                employees.value = rawEmployees.value;
+                isLoading.value = false;
             });
         }
 
@@ -75,14 +85,12 @@ export default {
             $('#employeeModal').modal('show');
         }
 
-        const storeEmployee = async (data) =>
-        {
+        const storeEmployee = async (employee) => {
             errors.value = '';
 
-            await axios.post('employee/create', data).then((response) => {
+            await axios.post('employee/create', employee).then((response) => {
                 getEmployees();
                 $('#employeeModal').modal('hide');
-
                 clearForm();
             }).catch((error) => {
                 if (error.response.data.errors) {
@@ -146,7 +154,8 @@ export default {
 
         onMounted(()=> {
             getEmployees();
-            getPosts()
+            getPosts();
+            getAuthorizedUser();
         });
 
         return{
@@ -160,7 +169,10 @@ export default {
             deleteEmployee,
             posts,
             sortTable,
-            handleSearch
+            handleSearch,
+            roles,
+            isLoading,
+            authorizedUser
         }
     }
 }
@@ -189,7 +201,12 @@ export default {
                     <th class="text-end">Действия</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="isLoading">
+                <h1 class="text-white">
+                    Загрузка...
+                </h1>
+                </tbody>
+                <tbody v-else>
                 <tr class="table-active" v-for="employee in employees" :key="employee.id">
                     <td>
                         {{employee.last_name + ' ' + employee.first_name + ' ' + employee.middle_name}}
@@ -202,8 +219,10 @@ export default {
                     </td>
                     <td>
                         <div class="float-end">
-                            <button @click="deleteEmployee(employee.id)" class="btn btn-danger">Удалить</button>
-                            <button @click="editEmployee(employee)" class="ms-1 btn btn-secondary">Изменить</button>
+                            <button v-if="employee.id !== authorizedUser.employee?.id" @click="deleteEmployee(employee.id)" class="btn btn-danger">Удалить</button>
+                            <button v-else class="btn btn-danger disabled">Удалить</button>
+                            <button v-if="employee.id !== authorizedUser.employee?.id" @click="editEmployee(employee)" class="ms-1 btn btn-secondary">Изменить</button>
+                            <button v-else class="ms-1 btn btn-secondary disabled">Изменить</button>
                         </div>
                     </td>
                 </tr>
@@ -228,26 +247,31 @@ export default {
                         <div v-if="errors" class="text-danger">
                             {{errors}}
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Фамилия</label>
-                            <input v-model="form.last_name" type="text" class="form-control" placeholder="фамилия"/>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Имя</label>
-                            <input v-model="form.first_name" type="text" class="form-control" placeholder="имя"/>
+                        <div class="row">
+                            <div class="form-group col">
+                                <label class="form-label">Фамилия</label>
+                                <input v-model="form.last_name" type="text" class="form-control" placeholder="фамилия"/>
+                            </div>
+                            <div class="form-group col">
+                                <label class="form-label">Имя</label>
+                                <input v-model="form.first_name" type="text" class="form-control" placeholder="имя"/>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Отчество</label>
                             <input v-model="form.middle_name" type="text" class="form-control" placeholder="отчество"/>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Серия паспорта</label>
-                            <input v-model="form.passport_series" type="text" class="form-control" placeholder="серия паспорта"/>
+                        <div class="row">
+                            <div class="form-group col">
+                                <label class="form-label">Серия паспорта</label>
+                                <input v-model="form.passport_series" type="text" class="form-control" placeholder="серия паспорта"/>
+                            </div>
+                            <div class="form-group col">
+                                <label class="form-label">Номер паспорта</label>
+                                <input v-model="form.passport_number" type="text" class="form-control" placeholder="номер паспорта"/>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Номер паспорта</label>
-                            <input v-model="form.passport_number" type="text" class="form-control" placeholder="номер паспорта"/>
-                        </div>
+
                         <div class="form-group">
                             <label class="form-label">Дата рождения</label>
                             <input v-model="form.birthday_date" type="text" class="form-control" placeholder="дата рождения (ДД-ММ-ГГГГ)"/>

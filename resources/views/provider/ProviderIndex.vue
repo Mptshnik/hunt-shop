@@ -7,6 +7,7 @@ import useSearching from "../../helper/searching";
 export default {
     setup()
     {
+        const isLoading = ref(true);
         const editing = ref([]);
         const errors = ref([]);
         const provider = ref([]);
@@ -37,6 +38,7 @@ export default {
             axios.get('provider/all').then(res => {
                 rawProviders.value = res.data
                 providers.value = rawProviders.value;
+                isLoading.value = false;
             });
         }
 
@@ -138,7 +140,8 @@ export default {
             editProvider,
             handleSubmit,
             handleSearch,
-            sortTable
+            sortTable,
+            isLoading
         }
     }
 }
@@ -168,7 +171,12 @@ export default {
                     <th class="text-end">Действия</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="isLoading">
+                <h1 class="text-white mt-2">
+                    Загрузка...
+                </h1>
+                </tbody>
+                <tbody v-else>
                 <tr class="table-active" v-for="provider in providers" :key="provider.id">
                     <td>
                         {{ provider.name }}

@@ -1,15 +1,12 @@
 <script>
 import {onMounted, reactive, ref} from "vue";
 import axios from "axios";
-import useSorting from "../../helper/sorting";
-import useSearching from "../../helper/searching";
 
 export default {
     setup()
     {
         const editing = ref([]);
         const errors = ref(null);
-        const notFoundError = ref(null);
         const organization = ref(null);
         const form = reactive({
             'name': '',
@@ -29,11 +26,6 @@ export default {
         const getOrganization = () => {
             axios.get('seller/' + 1).then(res => {
                 organization.value = res.data
-            }).catch((error) => {
-                if(error.response.status === 404)
-                {
-                    notFoundError.value = error.response.data.message;
-                }
             });
         }
 
@@ -110,7 +102,6 @@ export default {
             errors,
             organization,
             form,
-            notFoundError,
             handleSubmit,
             addOrganization,
             editOrganization

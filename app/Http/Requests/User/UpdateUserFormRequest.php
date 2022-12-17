@@ -25,11 +25,11 @@ class UpdateUserFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'login' => ['required', 'min:5|max:25' , Rule::unique('users')->ignore($this->id)],
+            'login' => ['required', 'min:5', 'max:25', Rule::unique('users')->ignore($this->id)],
             'password' => 'required|min:5|max:25',
             'agreement' => 'accepted',
             'role_id' => 'required|integer',
-            'employee_id' => 'nullable|integer'
+            'employee_id' => ['required', 'integer', Rule::unique('users')->ignore($this->id)]
         ];
     }
 
@@ -45,7 +45,9 @@ class UpdateUserFormRequest extends FormRequest
             'password.min' => 'Минимальная длина пароля - 5 символов',
             'password.max' => 'Максимальная длина пароля - 25 символов',
             'agreement.accepted' => 'Соглашение обязательно',
-            'role_id.required' => 'Роль обязательна'
+            'role_id.required' => 'Роль обязательна',
+            'employee_id.required' => 'Сотрудник обязателен',
+            'employee_id.unique' => 'У выбранного сотрудника уже есть аккаунт'
         ];
     }
 }

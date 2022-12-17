@@ -33,7 +33,7 @@ class CreateUserFormRequest extends FormRequest
             'password' => 'required|min:5|max:25',
             'agreement' => 'accepted',
             'role_id' => 'required|integer',
-            'employee_id' => 'nullable|integer'
+            'employee_id' => 'required|integer|unique:users'
         ];
     }
 
@@ -51,7 +51,10 @@ class CreateUserFormRequest extends FormRequest
             'password.max' => 'Максимальная длина пароля - 25 символов',
 
             'agreement.accepted' => 'Соглашение обязательно',
-            'role_id.required' => 'Роль обязательна'
+            'role_id.required' => 'Роль обязательна',
+
+            'employee_id.required' => 'Сотрудник обязателен',
+            'employee_id.unique' => 'У выбранного сотрудника уже есть аккаунт'
         ];
     }
 }

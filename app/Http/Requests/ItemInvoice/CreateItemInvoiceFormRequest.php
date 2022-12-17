@@ -35,12 +35,12 @@ class CreateItemInvoiceFormRequest extends FormRequest
     public function messages()
     {
         return [
-            'seller_id.required' => 'ID организации обязателен',
+            'seller_id.required' => 'Организация обязательна',
             'seller_id.min' => 'ID организации должен быть больше и равен 0',
             'seller_id.integer' => 'ID организации дожен быть числовым',
             'seller_id.exists' => 'Организация с таким ID не найдена',
 
-            'provider_id.required' => 'ID поставщика обязателен',
+            'provider_id.required' => 'Поставщик обязателен',
             'provider_id.min' => 'ID поставщика должен быть больше и равен 0',
             'provider_id.integer' => 'ID поставщика дожен быть числовым',
             'provider_id.exists' => 'Поставщик с таким ID не найден',

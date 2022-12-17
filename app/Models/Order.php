@@ -39,8 +39,8 @@ class Order extends Model
             $sum+=$item->getPriceForCount();
         }
 
-        return new Attribute(
-            get: fn() => $sum
+        return Attribute::make(
+            fn() => $sum
         );
     }
 

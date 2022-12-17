@@ -8,6 +8,7 @@ import useSearching from "../../helper/searching";
 export default {
     setup()
     {
+        const isLoading = ref(true);
         const editing = ref([]);
         const errors = ref([]);
         const category = ref([]);
@@ -31,6 +32,7 @@ export default {
             axios.get('item-category/all').then(res => {
                 rawCategories.value = res.data;
                 categories.value = rawCategories.value;
+                isLoading.value = false;
             });
         }
 
@@ -130,7 +132,8 @@ export default {
             handleSubmit,
             roles,
             sortTable,
-            handleSearch
+            handleSearch,
+            isLoading
         }
     }
 }
@@ -158,7 +161,12 @@ export default {
                     <th class="text-end">Действия</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="isLoading">
+                <h1 class="text-white mt-2">
+                    Загрузка...
+                </h1>
+                </tbody>
+                <tbody v-else>
                 <tr class="table-active" v-for="category in categories" :key="category.id">
                     <td>
                         <div class="content">

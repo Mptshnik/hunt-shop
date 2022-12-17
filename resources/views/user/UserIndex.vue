@@ -9,10 +9,14 @@ export default
 {
     setup()
     {
+        const isLoading = ref(true);
         const editing = ref([]);
         const errors = ref([]);
+        const rawEmployees = ref([]);
+        const employees = ref([]);
         const user = ref([]);
         const rawUsers = ref([]);
+        const authorizedUser = ref(null);
         const users = ref([]);
         const {sortRecords} = useSorting();
         const {onSearch} = useSearching();
@@ -21,24 +25,42 @@ export default
             'login': '',
             'password': '',
             'role_id': '',
+            'employee_id': '',
             'agreement': '1'
         })
 
         const clearForm = () =>
         {
-            form.description = '';
-            form.name = '';
+            form.login = '';
+            form.password = '';
             form.role_id = '';
+            form.employee_id = '';
             form.agreement = '1';
         }
 
         errors.value = null;
+
+        const getAuthorizedUser = async () =>
+        {
+            await axios.get('/authorized-user').then(res => {
+                authorizedUser.value = res.data
+            });
+        }
+
+        const getEmployees = async () =>
+        {
+            await axios.get('employee/all').then(res => {
+                rawEmployees.value = res.data;
+                employees.value = rawEmployees.value;
+            });
+        }
 
         const getUsers = () =>
         {
             axios.get('user/all').then(res => {
                 users.value = res.data;
                 rawUsers.value = users.value;
+                isLoading.value = false;
             });
         }
 
@@ -88,7 +110,8 @@ export default
 
             form.login = data.login;
             form.password = data.password;
-            form.role_id = data.role.id
+            form.role_id = data.role.id;
+            form.employee_id = data.employee.id;
 
             user.value = data;
         }
@@ -96,6 +119,8 @@ export default
         const updateUser = async (data) =>
         {
             errors.value = '';
+
+            console.log(data.login)
 
             await axios.post('user/update/' + user.value.id, data).then((response) => {
                 getUsers();
@@ -127,7 +152,11 @@ export default
             sortRecords(users, rawUsers, index);
         }
 
-        onMounted(getUsers);
+        onMounted(() => {
+            getUsers();
+            getEmployees();
+            getAuthorizedUser();
+        });
 
         return{
             form,
@@ -140,7 +169,10 @@ export default
             handleSubmit,
             roles,
             handleSearch,
-            sortTable
+            sortTable,
+            isLoading,
+            employees,
+            authorizedUser
         }
     }
 }
@@ -166,10 +198,16 @@ export default
                 <tr>
                     <th scope="col" v-on:click="sortTable('login')">Логин</th>
                     <th scope="col" v-on:click="sortTable('created_at')">Дата регистрации</th>
+                    <th scope="col">Сотрудник</th>
                     <th class="text-end">Действия</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="isLoading">
+                <h1 class="text-white">
+                    Загрузка...
+                </h1>
+                </tbody>
+                <tbody v-else>
                 <tr class="table-active" v-for="user in users" :key="user.id">
                     <td>
                         <div class="content">
@@ -182,9 +220,20 @@ export default
                         </div>
                     </td>
                     <td>
+                        <div v-if="user.employee">
+                            {{
+                                user.employee.last_name + ' '
+                                + user.employee.first_name + ' '
+                                + user.employee.middle_name
+                            }}
+                        </div>
+                    </td>
+                    <td>
                         <div class="float-end">
-                            <button @click="deleteUser(user.id)" class="btn btn-danger me-2">Удалить</button>
-                            <button @click="editUser(user)" class="btn btn-secondary me-2">Изменить</button>
+                            <button v-if="user.id !== authorizedUser.id" @click="deleteUser(user.id)" class="btn btn-danger me-2">Удалить</button>
+                            <button v-else class="btn btn-danger me-2 disabled">Удалить</button>
+                            <button v-if="user.id !== authorizedUser.id" @click="editUser(user)" class="btn btn-secondary me-2">Изменить</button>
+                            <button v-else class="btn btn-secondary me-2 disabled">Изменить</button>
                         </div>
                     </td>
                 </tr>
@@ -227,6 +276,45 @@ export default
                                 <option :value=roles.MARKETING_MANAGER>Менеджер по маркетингу</option>
                                 <option :value=roles.HR>Менеджер по персоналу</option>
                                 <option :value=roles.ADMIN>Администратор</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Сотрудник</label>
+                            <select v-if="editing" class="form-select" v-model="form.employee_id"
+                                    aria-label="Default select example">
+                                <option v-for="employee in employees" :value=employee.id
+                                        :selected="employee.id === form.employee_id">
+                                    <div class="row g-3 align-items-center mb-3">
+                                        <div class="col-auto">
+                                            {{
+                                                employee.last_name + ' '
+                                                + employee.first_name + ' '
+                                                + employee.middle_name
+                                            }}
+                                        </div>
+                                        <div v-if="employee.post" class="col-auto">
+                                           {{' (' + employee.post.name + ')'}}
+                                        </div>
+                                    </div>
+
+                                </option>
+                            </select>
+                            <select v-else class="form-select" v-model="form.employee_id"
+                                    aria-label="Default select example">
+                                <option v-for="employee in employees" :value=employee.id>
+                                    <div class="row g-3 align-items-center mb-3">
+                                        <div class="col-auto">
+                                            {{
+                                                employee.last_name + ' '
+                                                + employee.first_name + ' '
+                                                + employee.middle_name
+                                            }}
+                                        </div>
+                                        <div v-if="employee.post" class="col-auto">
+                                            {{' (' + employee.post.name + ')'}}
+                                        </div>
+                                    </div>
+                                </option>
                             </select>
                         </div>
                     </div>

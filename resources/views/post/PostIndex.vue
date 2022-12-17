@@ -8,7 +8,8 @@ export default
 {
     setup()
     {
-        const errors = ref([]);
+        const isLoading = ref(true);
+        const errors = ref(null);
         const post = ref([]);
         const posts = ref([]);
         const rawPosts = ref([]);
@@ -26,8 +27,6 @@ export default
             form.description = '';
             form.name = '';
         }
-
-        errors.value = null;
 
         const getPost = (id) =>
         {
@@ -47,6 +46,7 @@ export default
             await axios.get('post/all').then(res => {
                 rawPosts.value = res.data;
                 posts.value = rawPosts.value;
+                isLoading.value = false;
             });
         }
 
@@ -62,7 +62,8 @@ export default
             errors.value = '';
 
             await axios.post('post/create', data).then((response) => {
-                getPosts();
+                //getPosts();
+                posts.value.push(response.data.post)
                 $('#postModal').modal('hide');
 
                 clearForm();
@@ -135,7 +136,8 @@ export default
             errors,
             editPost,
             handleSearch,
-            sortTable
+            sortTable,
+            isLoading
         }
     }
 }
@@ -164,7 +166,12 @@ export default
                     <th class="text-end">Действия</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="isLoading">
+                <h1 class="text-white mt-2">
+                    Загрузка...
+                </h1>
+                </tbody>
+                <tbody v-else>
                 <tr class="table-active" v-for="post in posts" :key="post.id">
                     <td>{{ post.name }}</td>
                     <td>
@@ -180,6 +187,7 @@ export default
                     </td>
                 </tr>
                 </tbody>
+
             </table>
         </div>
     </div>

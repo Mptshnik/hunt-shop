@@ -6,6 +6,28 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
+            path: '/cart',
+            name: 'Cart',
+            component: () => import("../views/cart/CartIndex.vue"),
+            meta: {
+                roles: [
+                    roles.ADMIN,
+                    roles.SALES_MANAGER
+                ]
+            }
+        },
+        {
+            path: '/item-invoice/create',
+            name: 'ItemInvoice',
+            component: () => import("../views/item-invoice/ItemInvoiceCreate.vue"),
+            meta: {
+                roles: [
+                    roles.ADMIN,
+                    roles.PURCHASING_MANAGER
+                ]
+            }
+        },
+        {
             path: '/organization',
             name: 'Organization',
             component: () => import("../views/organization/OrganizationIndex.vue"),

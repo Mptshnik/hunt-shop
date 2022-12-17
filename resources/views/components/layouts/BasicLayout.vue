@@ -33,7 +33,14 @@
 
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                <a v-if="user.employee" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                    {{
+                                        user.employee?.last_name + ' '
+                                        + user.employee?.first_name + ' '
+                                        + user.employee?.middle_name
+                                    }}
+                                </a>
+                                <a v-else class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                                     Аккаунт
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark">
@@ -66,8 +73,16 @@ export default {
     {
         let role = parseInt(localStorage.getItem('USER_ROLE_ID'));
 
+        const user = ref([]);
         const isLoggedIn = ref(false);
         const userRole = ref(role);
+
+        const getAuthorizedUser = async () =>
+        {
+            await axios.get('/authorized-user').then(res => {
+                user.value = res.data
+            });
+        }
 
         const logout = () =>
         {
@@ -83,7 +98,9 @@ export default {
             isLoggedIn,
             userRole,
             logout,
-            navBarItems
+            navBarItems,
+            user,
+            getAuthorizedUser
         }
     },
     watch:{
@@ -95,6 +112,7 @@ export default {
                 } else {
                     this.isLoggedIn = true;
                     this.userRole = parseInt(localStorage.getItem('USER_ROLE_ID'));
+                    this.getAuthorizedUser();
                 }
             }
         }
