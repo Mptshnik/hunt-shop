@@ -9,9 +9,15 @@ use Illuminate\Support\Facades\Cookie;
 
 class CartController extends Controller
 {
+    public function test()
+    {
+        return response(['message' => 'test'])
+            ->withCookie(cookie('test', 'test', 60, '/', '127.0.0.1:8000', false, false));
+    }
+
     public function index(Request $request)
     {
-        $orderId = $request->cookie('orderId');
+        $orderId = $request->orderId;
 
         if(is_null($orderId))
         {
@@ -25,7 +31,7 @@ class CartController extends Controller
 
     public function addToCart(Request $request, $itemId)
     {
-        $orderId = $request->cookie('orderId');
+        $orderId = $request->orderId;
 
         $item = Item::find($itemId);
 
@@ -37,12 +43,11 @@ class CartController extends Controller
         if(is_null($orderId))
         {
             $order = Order::create();
-//            $cookie = ;
 
             $order->items()->attach($item);
 
-            return response($order->where('id', $order->id)->with('items')->first())
-                ->withCookie(cookie('orderId', $order->id, 60*24));
+            return response($order->where('id', $order->id)->with('items')->first());
+               // ->withCookie(cookie('orderId', $order->id, 60*24, '/', '127.0.0.1', false, false));
         }
 
         $order = Order::find($orderId);
@@ -92,7 +97,7 @@ class CartController extends Controller
 
     public function removeFromCart(Request $request, $itemId)
     {
-        $orderId = $request->cookie('orderId');
+        $orderId = $request->orderId;
 
         $item = Item::find($itemId);
 

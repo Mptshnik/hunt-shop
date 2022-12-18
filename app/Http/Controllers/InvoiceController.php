@@ -21,6 +21,6 @@ class InvoiceController extends Controller
 
     public function getAll()
     {
-        return response(Invoice::with('seller')->with('order')->with('client')->get());
+        return response(Invoice::with('seller')->with('order')->with('order.client')->get());
     }
 }

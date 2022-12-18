@@ -21,7 +21,7 @@ class PurchaseApplicationController extends Controller
         $employee = Employee::find($employee_id);
         if($employee == null)
         {
-            return response(['message' => 'Не удалось создать заявку.'.
+            return response(['employee_message' => 'Не удалось создать заявку.'.
             'За вашим аккаунтом не закреплен сотрудник.'], 422);
         }
 

@@ -16,12 +16,12 @@ class OrderController extends Controller
     {
         $data = $request->validated();
 
-        $orderId = $request->cookie('orderId');
+        $orderId = $request->orderId;
         $order = Order::find($orderId);
 
         if($order == null)
         {
-            return response(['message' => "Заказа с id=$orderId не найден"]);
+            return response(['message' => "Заказ с id=$orderId не найден"]);
         }
 
         $order['client_id'] = $data['client_id'];
@@ -30,8 +30,6 @@ class OrderController extends Controller
         $order['order_time'] = Carbon::now()->format('Y-m-d H:m:s');
 
         $order->save();
-
-        $cookie = Cookie::forget('orderId');
 
         $invoice_data = [
             'order_id' => $orderId,
@@ -45,7 +43,7 @@ class OrderController extends Controller
         return response([
             'order' => $order,
             'message' => 'Заказ оформлен'
-        ])->withCookie($cookie);
+        ]);
     }
 
     public function getOne($id)

@@ -138,6 +138,7 @@ Route::middleware('auth:sanctum')->group(function ()
 
     Route::group(['prefix' => '/cart'], function ()
     {
+        Route::post('/test', [\App\Http\Controllers\CartController::class, 'test']);
         Route::post('/add-item/{id}', [\App\Http\Controllers\CartController::class, 'addToCart']);
         Route::post('/remove-item/{id}', [\App\Http\Controllers\CartController::class, 'removeFromCart']);
         Route::post('/remove-all', [\App\Http\Controllers\CartController::class, 'removeAllFromCart']);

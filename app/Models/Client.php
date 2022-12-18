@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -37,6 +38,39 @@ class Client extends Model
     {
         return $this->belongsTo(JuridicalStatus::class);
     }
+
+    protected function personName():Attribute
+    {
+        if(!is_null($this->person))
+        {
+            return Attribute::make(fn()=> "{$this->person->last_name} {$this->person->first_name} {$this->person->midle_name}");
+        }
+
+        return Attribute::make(fn()=>'');
+    }
+
+    protected function organizationName():Attribute
+    {
+        if(!is_null($this->organisation))
+        {
+            return Attribute::make(fn()=> $this->organisation->name);
+        }
+
+        return Attribute::make(fn()=> '');
+    }
+
+    protected function juridicalAddressName():Attribute
+    {
+        if(is_null($this->juridical_address))
+        {
+            return Attribute::make(fn()=> '');
+        }
+
+        return Attribute::make(fn()=> $this->juridical_address);
+    }
+
+    protected $appends = ['person_name', 'organization_name', 'juridical_address_name'];
+
 
     public function organisation()
     {

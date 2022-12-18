@@ -77,17 +77,17 @@ export default {
             await axios.post('purchase-application/create', data).then((response) => {
                 getApplications();
                 $('#applicationModal').modal('hide');
-
                 clearForm();
             }).catch((error) => {
+                if(error.response.data.hasOwnProperty('employee_message'))
+                {
+                    errors.value += error.response.data.employee_message;
+                }
+
                 if (error.response.data.errors) {
                     for (const key in error.response.data.errors) {
                         errors.value += error.response.data.errors[key][0] + '. ';
                     }
-                }
-                if(error.response.data.message)
-                {
-                    errors.value = error.response.data.message;
                 }
             });
         }

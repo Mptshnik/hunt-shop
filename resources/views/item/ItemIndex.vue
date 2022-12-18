@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ref, onMounted, reactive } from 'vue';
 import useSorting from "../../helper/sorting";
 import useSearching from "../../helper/searching";
+import router from "../../router";
 
 export default {
     setup() {
@@ -41,11 +42,19 @@ export default {
 
         const addToCart = async (id) =>
         {
-            await axios.post('cart/add-item/'+id).then((response) => {
-                $('#itemDetailsModal').modal('hide');
-                $('#cartModal').modal('show');
-                console.log(response);
-            });
+            let orderId = localStorage.getItem('orderId');
+            if(orderId)
+            {
+                await axios.post('cart/add-item/'+id, {'orderId': orderId})
+            }
+            else {
+                await axios.post('cart/add-item/'+id).then((response) => {
+                    localStorage.setItem('orderId', response.data.id)
+                })
+            }
+
+            $('#itemDetailsModal').modal('hide');
+            $('#cartModal').modal('show');
         }
 
         const getItems = () =>
@@ -53,7 +62,6 @@ export default {
             axios.get('item/all').then(res => {
                 rawItems.value = res.data;
                 items.value = rawItems.value;
-                console.log(items.value)
                 isLoading.value = false;
             });
         }
@@ -133,6 +141,10 @@ export default {
             sortRecords(items, rawItems, index);
         }
 
+        const navigateToCart = () => {
+            router.push('/cart');
+        }
+
         onMounted(() => {
             getItemCategories();
             getItems();
@@ -153,6 +165,7 @@ export default {
             deleteItem,
             itemDetails,
             addToCart,
+            navigateToCart,
             item
         }
     }
@@ -216,7 +229,8 @@ export default {
                     Товар был добавлен в корзину
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Ок</button>
+                    <button @click="navigateToCart" type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Перейти к корзине</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Ок</button>
                 </div>
             </div>
         </div>
