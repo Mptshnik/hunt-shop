@@ -7,6 +7,7 @@ import router from "../../router";
 
 export default {
     setup() {
+        const categoryIdFilter = ref([]);
         const isLoading = ref(true);
         const item = ref([]);
         const promotions = ref([]);
@@ -59,6 +60,8 @@ export default {
 
         const getItems = () =>
         {
+            isLoading.value = true;
+
             axios.get('item/all').then(res => {
                 rawItems.value = res.data;
                 items.value = rawItems.value;
@@ -102,6 +105,18 @@ export default {
 
             item.value = data;
             $('#itemModal').modal('show');
+        }
+
+
+        const filterByCategory = () =>
+        {
+            isLoading.value = true;
+
+            axios.get('item/filterByCategory/' + categoryIdFilter.value).then(res => {
+                rawItems.value = res.data;
+                items.value = rawItems.value;
+                isLoading.value = false;
+            });
         }
 
         const updateItem = async () =>
@@ -166,7 +181,10 @@ export default {
             itemDetails,
             addToCart,
             navigateToCart,
-            item
+            getItems,
+            filterByCategory,
+            item,
+            categoryIdFilter
         }
     }
 }
@@ -181,6 +199,17 @@ export default {
             <div class="col-auto">
                 <input type="text" class="form-control" placeholder="Поиск" @input="handleSearch">
             </div>
+            <div class="col-auto">
+                <select class="form-select form-control-sm" v-model="categoryIdFilter" aria-label="Default select example">
+                    <option v-for="category in itemCategories" :value=category.id>{{ category.name }}</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button @click="filterByCategory" class="btn btn-dark">Фильтровать</button>
+            </div>
+            <div class="col-auto">
+                <button @click="getItems" class="btn btn-dark">Сбросить фильтр</button>
+            </div>
         </div>
         <div>
             <table class="table table-dark table-hover table-sm">
@@ -190,6 +219,7 @@ export default {
                     <th scope="col" v-on:click="sortTable('number')">Артикул</th>
                     <th scope="col" v-on:click="sortTable('count')">Количество</th>
                     <th scope="col" @click="sortTable('price')">Стоимость</th>
+                    <th scope="col">Категория</th>
                     <th class="text-end">Действия</th>
                 </tr>
                 </thead>
@@ -204,6 +234,7 @@ export default {
                     <td>{{item.number}}</td>
                     <td>{{item.count}}</td>
                     <td>{{item.price }}₽</td>
+                    <td>{{item.item_category?.name}}</td>
                     <td>
                         <div class="float-end">
                             <button @click="deleteItem(item.id)" class="btn btn-danger">Удалить</button>

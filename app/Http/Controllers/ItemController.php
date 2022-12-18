@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
+    public function filterByCategoryId($id)
+    {
+        return Item::with('itemInvoice')->with('promotion')->with('itemCategory')
+            ->where('item_category_id', $id)->get();
+    }
+
     public function store(CreateItemFormRequset $requset)
     {
         $item = Item::create($requset->validated());

@@ -11,9 +11,9 @@ class Post extends Model
 
     public $timestamps = false;
 
-    public function employee()
+    public function employees()
     {
-        return $this->hasOne(Employee::class);
+        return $this->hasMany(Employee::class);
     }
 
     protected $fillable = [

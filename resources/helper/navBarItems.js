@@ -132,6 +132,11 @@ const navBarItems = [
                 path: '/purchases-statistics',
                 roles: [roles.ADMIN, roles.ACCOUNTANT, roles.PURCHASING_MANAGER]
             },
+            {
+                title: 'Сотрудники',
+                path: '/employee-statistics',
+                roles: [roles.ADMIN, roles.HR]
+            },
         ]
     },
 

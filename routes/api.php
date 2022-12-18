@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::post('/delete/{id}',[\App\Http\Controllers\EmployeeController::class, 'delete']);
         Route::get('/all', [\App\Http\Controllers\EmployeeController::class, 'getAll']);
         Route::get('/{id}',[\App\Http\Controllers\EmployeeController::class, 'getOne']);
+        Route::get('/filterByPost/{id}',[\App\Http\Controllers\EmployeeController::class, 'filterByPostId']);
     });
 
     Route::group(['prefix' => '/user'], function ()
@@ -128,6 +129,7 @@ Route::middleware('auth:sanctum')->group(function ()
         Route::post('/update/{id}',[\App\Http\Controllers\ItemController::class, 'update']);
         Route::get('/all', [\App\Http\Controllers\ItemController::class, 'getAll']);
         Route::get('/{id}', [\App\Http\Controllers\ItemController::class, 'getOne']);
+        Route::get('filterByCategory/{id}', [\App\Http\Controllers\ItemController::class, 'filterByCategoryId']);
     });
 
     Route::group(['prefix' => '/order'], function (){

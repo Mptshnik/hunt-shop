@@ -13,6 +13,11 @@ use PharIo\Manifest\Email;
 
 class EmployeeController extends Controller
 {
+    public function filterByPostId($id)
+    {
+        return Employee::with('post')->where('post_id', $id)->first();
+    }
+
     public function store(CreateEmployeeFormRequest $request)
     {
         $data = $request->validated();

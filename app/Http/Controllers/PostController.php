@@ -61,8 +61,9 @@ class PostController extends Controller
 
     public function getAll()
     {
-        return response(Post::all(), 201);
+        return response(Post::withCount('employees')->get(), 201);
     }
+
 
     public function getOne($id)
     {

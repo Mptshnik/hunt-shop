@@ -10,6 +10,7 @@ export default {
     setup()
     {
         const isLoading = ref(true);
+        const postIdFilter = ref([]);
         const errors = ref(null);
         const employee = ref([]);
         const authorizedUser = ref([]);
@@ -48,6 +49,14 @@ export default {
             });
         }
 
+        const filterByPost = () =>
+        {
+            axios.get('employee/filterByPost/' + postIdFilter.value).then(res => {
+                rawEmployees.value = res.data;
+                employees.value = rawEmployees.value;
+                isLoading.value = false;
+            });
+        }
 
         const getEmployee = (id) =>
         {
@@ -71,6 +80,7 @@ export default {
 
         const getEmployees = async () =>
         {
+            isLoading.value = true;
             await axios.get('employee/all').then(res => {
                 rawEmployees.value = res.data;
                 employees.value = rawEmployees.value;
@@ -172,7 +182,10 @@ export default {
             handleSearch,
             roles,
             isLoading,
-            authorizedUser
+            authorizedUser,
+            postIdFilter,
+            filterByPost,
+            getEmployees
         }
     }
 }
@@ -189,6 +202,18 @@ export default {
             </div>
             <div class="col-auto">
                 <input type="text" class="form-control" placeholder="Поиск" @input="handleSearch">
+            </div>
+            <div class="col-auto">
+                <select class="form-select form-control-sm" v-model="postIdFilter" aria-label="Default select example">
+                    <!--<option value="" selected disabled hidden>Фильтровать по должности</option>-->
+                    <option v-for="post in posts" :value=post.id>{{ post.name }}</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button @click="filterByPost" class="btn btn-dark">Фильтровать</button>
+            </div>
+            <div class="col-auto">
+                <button @click="getEmployees" class="btn btn-dark">Сбросить фильтр</button>
             </div>
         </div>
         <div>
