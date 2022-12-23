@@ -9,6 +9,7 @@ import useSearching from "../../helper/searching";
 export default {
     setup()
     {
+        const exportUrl = axios.defaults.baseURL+'employee/export/all';
         const isLoading = ref(true);
         const postIdFilter = ref([]);
         const errors = ref(null);
@@ -51,9 +52,13 @@ export default {
 
         const filterByPost = () =>
         {
+            isLoading.value = true;
+
             axios.get('employee/filterByPost/' + postIdFilter.value).then(res => {
                 rawEmployees.value = res.data;
                 employees.value = rawEmployees.value;
+                isLoading.value = false;
+            }).catch((error) => {
                 isLoading.value = false;
             });
         }
@@ -81,6 +86,7 @@ export default {
         const getEmployees = async () =>
         {
             isLoading.value = true;
+
             await axios.get('employee/all').then(res => {
                 rawEmployees.value = res.data;
                 employees.value = rawEmployees.value;
@@ -126,6 +132,13 @@ export default {
             form.post_id = data.post?.id;
 
             employee.value = data;
+        }
+
+        const exportEmployees = async () =>
+        {
+            await axios.get('employee/export/all').then((res) => {
+
+            });
         }
 
         const updateEmployee = async (data) =>
@@ -184,8 +197,10 @@ export default {
             isLoading,
             authorizedUser,
             postIdFilter,
+            exportUrl,
             filterByPost,
-            getEmployees
+            getEmployees,
+            exportEmployees
         }
     }
 }
@@ -214,6 +229,9 @@ export default {
             </div>
             <div class="col-auto">
                 <button @click="getEmployees" class="btn btn-dark">Сбросить фильтр</button>
+            </div>
+            <div class="col-auto">
+                <a :href="exportUrl" class="btn btn-outline-light">Экспорт</a>
             </div>
         </div>
         <div>

@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Employee\CreateEmployeeFormRequest;
 use App\Http\Requests\Employee\UpdateEmployeeFormRequest;
 use App\Models\Employee;
+use App\Exports\EmployeesExport;
+use http\Env\Response;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,9 +17,14 @@ use PharIo\Manifest\Email;
 
 class EmployeeController extends Controller
 {
+    public function export()
+    {
+        return (new EmployeesExport())->download('employees.xlsx');
+    }
+
     public function filterByPostId($id)
     {
-        return Employee::with('post')->where('post_id', $id)->first();
+        return Employee::with('post')->where('post_id', $id)->get();
     }
 
     public function store(CreateEmployeeFormRequest $request)

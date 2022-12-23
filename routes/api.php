@@ -20,7 +20,8 @@ Route::middleware('guest')->group(function (){
     Route::get('roles', function (){
         return \App\Models\Role::all();
     });
-
+    Route::get('employee/export/all',[\App\Http\Controllers\EmployeeController::class, 'export']);
+    Route::get('database/export/all',[\App\Http\Controllers\ExportController::class, 'exportAllData']);
 });
 
 Route::middleware('auth:sanctum')->group(function ()
@@ -51,7 +52,7 @@ Route::middleware('auth:sanctum')->group(function ()
 
     Route::group(['prefix' => 'post'], function ()
     {
-        Route::post('/create',[\App\Http\Controllers\PostController::class, 'store']);
+        Route::post('/create',[\App\Http\Controllers\PostController::class, 'store'])->name('post.create');
         Route::post('/delete/{id}',[\App\Http\Controllers\PostController::class, 'delete']);
         Route::post('/update/{id}',[\App\Http\Controllers\PostController::class, 'update']);
 

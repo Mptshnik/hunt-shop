@@ -139,6 +139,11 @@ const navBarItems = [
             },
         ]
     },
+    {
+        title: 'БД',
+        path: '/db',
+        roles: [roles.ADMIN]
+    }
 
 ]
 

@@ -7,11 +7,12 @@
     <title>Магазин охоты</title>
 </head>
 <body style="background-color: #3c3f41">
+<script type="module" src="{{mix('resources/js/app.js')}}"></script>
     <div id="app">
 
     </div>
 
-    @vite('./resources/js/app.js')
+{{--    @vite('./resources/js/app.js')--}}
 </body>
 
 </html>

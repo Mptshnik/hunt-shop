@@ -6,6 +6,16 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
+            path: '/db',
+            name: 'Database',
+            component: () => import("../views/database.vue"),
+            meta: {
+                roles: [
+                    roles.ADMIN
+                ]
+            }
+        },
+        {
             path: '/employee-statistics',
             name: 'EmployeeStatistics',
             component: () => import("../views/statistics/EmployeeStatistics.vue"),

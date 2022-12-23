@@ -11,4 +11,7 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        origin: 'https://huntshop-student23.ru/',
+    },
 });

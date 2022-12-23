@@ -53,6 +53,7 @@ export default {
                     this.error = res.data.message;
                 }
                 else {
+                    console.log('Успешная авторизация')
                     localStorage.setItem('JWT', res.data.token);
                     localStorage.setItem('USER_ROLE_ID', res.data.user.role.id);
                     router.push('/');
